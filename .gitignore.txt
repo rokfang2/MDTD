@@ -1,7 +1,0 @@
-.godot/
-.import/
-
-export_presets.cfg
-*.exe
-*.apk
-*.zip

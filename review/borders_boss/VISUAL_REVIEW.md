@@ -1,0 +1,19 @@
+# Revisão visual independente — bordas e Cordyceps (revisão 16)
+
+Resultado: bordas e apresentação da morte aprovadas nas capturas examinadas. Nenhum impedimento P1/P2 visual identificado. A leitura dos avisos e a emissão frontal dos esporos nos dois lados também foram aprovadas nas capturas suplementares.
+
+## Evidência visual
+
+Comparação com a coluna A de `art/style_a_reference.png` e inspeção dos PNGs reais, sem alterar código ou arte. Amostras ambientais examinadas: 01, 02, 03, 12 e 13; combate: todos os 21 PNGs iniciais e os dois `04b_spores_travel`, com `sequence.csv` e `spore_travel.csv`.
+
+- **Bordas 01/13:** o topo termina em moss arredondado, sem a linha verde prolongada; o lado do sólido recua em pequenos degraus com contorno escuro. Em 13, x≈638 entre y450–720, a raiz interior ainda encontra a parede, mas a silhueta agora identifica uma falésia contínua em vez de um recorte retangular sem acabamento. Isso não equivale a cada raiz ter ponta autoral; é um limite residual não impeditivo. Plataformas suspensas observadas têm terminações e inferiores completos. Em 02/03/12 não aparecem buracos na junção moss/solo, emenda UV saliente ou apoio visual novo fora da superfície.
+- **Combate:** raízes têm aviso na posição travada e surgem ali mesmo com o jogador deslocado (01→02). Pulso tem marca magenta no piso e o quadro aéreo mantém o jogador legível (05→06). Mandíbulas tem marca direcional anterior ao deslocamento, seguido de recuperação explicitamente comunicada (07→09). Os avisos não cobrem os corpos. A fase II é comunicada separadamente (10).
+- **Esporos nos dois lados:** olhos/cabeça/mandíbulas se voltam para o jogador à esquerda e à direita em 03/04, sem inversão da anatomia. Os suplementos `04b_spores_travel_-1/1`, 20 ticks depois do início do golpe natural, mostram ciano saindo do lado frontal correto: à esquerda em x≈580/y500, separado da cabeça; à direita em x≈937/y500, ainda parcialmente sobre a mandíbula. Assim, emissão e espelhamento estão confirmados visualmente, sem ocultar o jogador. A dispersão completa das três esferas não foi amostrada, portanto não se certifica aqui toda a trajetória ou separação do leque. Inspeção complementar de `scripts/world.gd:333–339` confirma a origem pelo sinal do alvo e a direção do disparo.
+- **Morte:** 11→12_collapse_0 mostra reação ao corte, depois pernas cedendo, corpo abaixando, queda lateral e restos com micélio. Os pés/restos permanecem apoiados na mesma linha do chão; não há corte do canvas nem crescimento uniforme do corpo. O abdômen fica um pouco mais segmentado nas poses novas, sem perder a identidade. A pose 2→3 levanta ligeiramente a parte traseira antes de baixar de vez, mas mantém apoio e lê redistribuição de peso, não teleporte. O corpo permanece reconhecível e visível em 5/6/7; o lótus aparece ao lado, sem escondê-lo.
+- **Momento da recompensa:** no CSV, poses 0–5 ainda têm `reward_ready=false`; em 6/7, `death_elapsed=2.6`, `state=defeated`, recompensa presente e mesma pose final persistente. As imagens confirmam essa ordem.
+
+## Limites
+
+Esta é revisão independente de quadros renderizados, não playtest humano nem avaliação integral do equilíbrio/dificuldade. Quadros espaçados comprovam poses e ancoragem, mas não certificam sozinhos a fluidez dos 2,6 s completos, latência dos avisos ou todas as combinações de golpes da fase II. Não foram revalidadas colisões ou dano por observação visual, nem todas as 15 posições ambientais. Logs fornecidos terminam em `CAPTURE_COMPLETE: 15 scenes` e `BOSS_CAPTURE_COMPLETE`; resultados automatizados pertencem à verificação separada e não são fundamento desta aprovação artística.
+
+Suplemento: os dois PNGs de voo e o CSV foram examinados; spore_travel_capture.log termina em SPORE_TRAVEL_CAPTURE_COMPLETE. Nenhuma alteração artística adicional foi necessária.
