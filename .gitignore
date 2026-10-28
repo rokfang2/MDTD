@@ -1,3 +1,82 @@
-# Godot 4+ specific ignores
+# Godot regenerates this local import/editor cache. Source .uid and resource .import settings are versioned.
 .godot/
-/android/
+
+# Local output, saves and credentials
+/build/
+/dist/
+/output/
+/backup_moveset/
+/tmp/
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+progress.json
+*.zip
+*.tmp
+__pycache__/
+*.pyc
+
+# Generated QA evidence stays local; retain reviewer guides and test helpers.
+/review/*
+!/review/REVIEW_GUIDE.md
+!/review/LATEST_REVIEW.md
+!/review/menu_original/
+/review/menu_original/*
+!/review/menu_original/VISUAL_REVIEW.md
+!/review/borders_boss/
+/review/borders_boss/*
+!/review/borders_boss/VISUAL_REVIEW.md
+!/review/borders_boss/EDGES.md
+!/review/borders_boss/tester/
+/review/borders_boss/tester/*
+!/review/borders_boss/tester/*.gd
+
+# Keep art specs/prompts and the approved style reference; exclude generated previews and raw attempts.
+/art/**/*.png
+/art/**/*.gif
+!/art/style_a_reference.png
+/art/**/raw/
+
+# Only resources consumed by this project. Historical variants stay outside the published tree.
+/assets/*
+!/assets/actions_native_v3.png
+!/assets/actions_native_v3.png.import
+!/assets/actors_v2.png
+!/assets/actors_v2.png.import
+!/assets/ambience.wav
+!/assets/ambience.wav.import
+!/assets/attack_native_v5.png
+!/assets/attack_native_v5.png.import
+!/assets/cordyceps_death_sheet_v1.png
+!/assets/cordyceps_death_sheet_v1.png.import
+!/assets/dash.wav
+!/assets/dash.wav.import
+!/assets/hit.wav
+!/assets/hit.wav.import
+!/assets/hurt.wav
+!/assets/hurt.wav.import
+!/assets/idle_native_v3.png
+!/assets/idle_native_v3.png.import
+!/assets/lotus.wav
+!/assets/lotus.wav.import
+!/assets/prayer_native_v3.png
+!/assets/prayer_native_v3.png.import
+!/assets/run_native_v4.png
+!/assets/run_native_v4.png.import
+!/assets/slash.wav
+!/assets/slash.wav.import
+!/assets/style_a_atlas.png
+!/assets/style_a_atlas.png.import
+!/assets/style_a_forest_candidate_v5.png
+!/assets/style_a_forest_candidate_v5.png.import
+!/assets/style_a_soil_candidate_v4.png
+!/assets/style_a_soil_candidate_v4.png.import
+!/assets/style_a_terrain_candidate_v4.png
+!/assets/style_a_terrain_candidate_v4.png.import
+!/assets/warning.wav
+!/assets/warning.wav.import
+
+# Restored authored menu assets and canonical scene casing are versioned.
+# Large generated menu captures/logs remain local.

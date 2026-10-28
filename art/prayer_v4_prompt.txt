@@ -1,0 +1,3 @@
+Ferramenta: image_gen integrada (modo padrão), PNG final em assets/.
+
+Transparent background single game character sprite, reference image shows same protagonist. Draw ONLY this same green forest druid in deeply kneeling prayer pose side view facing right, both knees on ground, head bowed, green hands clasped at chest, folded beige petal cape, one stone grey leg and one green leg, green vine hair, tiny cyan eye. Preserve character identity and palette. True chunky low-resolution pixel art designed native32x28 pixels enlarged nearest, purple black 1pixel outlines, simple limited color clusters, no smooth curves, no text, no lotus or other objects, no shadow, entire silhouette visible.

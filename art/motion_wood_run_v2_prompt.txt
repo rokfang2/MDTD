@@ -1,0 +1,13 @@
+Use case: precise-object-edit
+EDIT ONLY THE ARMS/HANDS OF THE FIRST EIGHT RUNNING SPRITES (first two rows) in this existing1402×1122 transparent pixel-art atlas. All sixteen body placements, scale, head, cape, hip, legs, feet and pose timing remain EXACTLY as provided. Entire bottom two rows unchanged. Same actual transparent background and canvas, no repositioning. Preserve already accepted eight LEG poses pixel for pixel.
+Problem: all hands currently remain frozen reaching forward. Fix natural opposing arm swing with large visible silhouette change and bent elbows. Two arms only per hero, two empty fists, no weapons. Near arm bright green with lime highlight, far arm darker green, clean separated silhouettes.
+Frame-specific arm posing, chronological order left-to-right row1 then row2:
+1 ROW1COL1 near bright leg forward: near bright ARM swings BACK LEFT, bent elbow behind torso, fist behind the hip. Far dark ARM swings FORWARD RIGHT at chest level bent90degrees. This is not two forward arms.
+2 ROW1COL2 near bright leg planted/support: near bright arm returns from behindhip toward torso, elbow down, fist beside waist. Far arm moves back from chest toward ribs.
+3 ROW1COL3 passing: near bright elbow bent below shoulder and near fist near chest; far dark arm begins moving backward.
+4 ROW1COL4 bright near leg stretched BACKLEFT and dark far leg FORWARDRIGHT: near bright ARM swings FORWARDRIGHT with fist ahead of chest and elbow bent. Far dark ARM swings BACKLEFT, fist behind hip.
+5 ROW2COL1 bright near leg BACKLEFT and dark far leg FORWARDRIGHT: MAXIMUM OPPOSITE of frame1, bright near fist reaches forward at upper chest with bent elbow, dark far fist behind hip.
+6 ROW2COL2 dark leg supporting: near bright fist descends from forward chest toward ribs, far dark arm returns forward from rear hip, bent elbows.
+7 ROW2COL3 bright near knee lifted FORWARDRIGHT: near bright ARM moves BACKLEFT with elbow bent, fist beside rear waist, dark far arm swings forward.
+8 ROW2COL4 bright near leg FORWARDRIGHT: near bright ARM swings far BACKLEFT behind hip, far dark fist FORWARDRIGHT at chest. This flows naturally into frame1.
+IMPORTANT visible arm counter-swing with near fist traveling behindhip-to-frontchest. Frame1/5 are opposite silhouettes. Hands must NOT all be extended ahead. Redraw arms only, preserve every existing leg, cape and face. Do not shift anatomy, stretch body, change head size or reframe. No silver, no metal, no sword or weapon in running. Current green shades and simple crisp low-res stepped pixel outline, no smooth edges, no detailed textures, no trails/text/grid.

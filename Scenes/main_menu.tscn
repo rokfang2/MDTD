@@ -60,13 +60,13 @@ corner_radius_bottom_left = 16
 script = ExtResource("1_ce3w2")
 
 [node name="Parallax2D" type="Parallax2D" parent="." unique_id=1982888822]
-scroll_offset = Vector2(0, 1)
-repeat_size = Vector2(1869.085, 0)
+repeat_size = Vector2(2160, 0)
+repeat_times = 2
 autoscroll = Vector2(-20, 0)
 
 [node name="Sprite2D" type="Sprite2D" parent="Parallax2D" unique_id=880104441]
-position = Vector2(1850, 0.464)
-scale = Vector2(-0.8605369, 0.8948853)
+position = Vector2(2160, 0)
+scale = Vector2(-0.9944751, 0.9944751)
 texture = ExtResource("2_ce3w2")
 centered = false
 
@@ -122,6 +122,22 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_ce3w2")
 theme_override_styles/hover = SubResource("StyleBoxFlat_n45e2")
 text = "Start Game"
 
+[node name="Continue" type="Button" parent="UI/HBoxContainer/MarginContainer/Menu/VBoxContainer"]
+visible = false
+custom_minimum_size = Vector2(160, 60)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.66927487, 1, 0.5273231, 1)
+theme_override_colors/font_hover_color = Color(0, 0.8156863, 0, 1)
+theme_override_colors/font_outline_color = Color(0.011087578, 0.01108758, 0.011087572, 1)
+theme_override_constants/outline_size = 7
+theme_override_fonts/font = ExtResource("3_ce3w2")
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_1ehe0")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ce3w2")
+theme_override_styles/hover = SubResource("StyleBoxFlat_n45e2")
+text = "Continue"
+
 [node name="Settings" type="Button" parent="UI/HBoxContainer/MarginContainer/Menu/VBoxContainer" unique_id=72468342]
 custom_minimum_size = Vector2(160, 60)
 custom_maximum_size = Vector2(200, 100)
@@ -154,6 +170,30 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_ce3w2")
 theme_override_styles/hover = SubResource("StyleBoxFlat_n45e2")
 text = "Credits"
 
+[node name="Footer" type="HBoxContainer" parent="UI/HBoxContainer/MarginContainer/Menu/VBoxContainer"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="Help" type="Button" parent="UI/HBoxContainer/MarginContainer/Menu/VBoxContainer/Footer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_ce3w2")
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.66927487, 1, 0.5273231, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_opfnp")
+theme_override_styles/hover = SubResource("StyleBoxFlat_1ehe0")
+text = "Como jogar"
+
+[node name="Exit" type="Button" parent="UI/HBoxContainer/MarginContainer/Menu/VBoxContainer/Footer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_ce3w2")
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.66927487, 1, 0.5273231, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_opfnp")
+theme_override_styles/hover = SubResource("StyleBoxFlat_1ehe0")
+text = "Sair"
+
 [node name="Menu_Options" type="PanelContainer" parent="UI/HBoxContainer" unique_id=604722565]
 visible = false
 layout_mode = 2
@@ -167,8 +207,6 @@ alignment = 1
 
 [node name="Label" type="RichTextLabel" parent="UI/HBoxContainer/Menu_Options/VBoxContainer" unique_id=984626502]
 layout_mode = 2
-offset_transform_enabled = true
-offset_transform_position = Vector2(0, -60)
 theme_override_colors/font_outline_color = Color(0.21942383, 0.106685735, 0, 1)
 theme_override_constants/shadow_outline_size = 1
 theme_override_constants/outline_size = 18
@@ -204,6 +242,7 @@ layout_mode = 2
 text = "0"
 
 [node name="HSlider" type="HSlider" parent="UI/HBoxContainer/Menu_Options/VBoxContainer/Volume_Row" unique_id=764924459]
+custom_minimum_size = Vector2(180, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
@@ -233,6 +272,13 @@ text = "Language"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="CurrentLanguage" type="Label" parent="UI/HBoxContainer/Menu_Options/VBoxContainer/Language_Row"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_ce3w2")
+theme_override_font_sizes/font_size = 20
+text = "Português (jogo)"
+vertical_alignment = 1
+
 [node name="Screen_Row" type="HBoxContainer" parent="UI/HBoxContainer/Menu_Options/VBoxContainer" unique_id=2063543011]
 layout_mode = 2
 
@@ -252,6 +298,12 @@ text = "Full Screen"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="FullscreenButton" type="CheckButton" parent="UI/HBoxContainer/Menu_Options/VBoxContainer/Screen_Row"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_ce3w2")
+theme_override_font_sizes/font_size = 20
+text = "Ativar"
+
 [node name="X" type="Button" parent="UI/HBoxContainer/Menu_Options" unique_id=245285970]
 custom_minimum_size = Vector2(60, 60)
 custom_maximum_size = Vector2(100, 100)
@@ -260,6 +312,62 @@ size_flags_horizontal = 8
 size_flags_vertical = 0
 theme_override_colors/font_color = Color(1, 0.47785366, 0.41005626, 1)
 theme_override_colors/font_hover_color = Color(0.5398626, 1.4860369e-06, 0, 1)
+theme_override_colors/font_outline_color = Color(0.011087578, 0.01108758, 0.011087572, 1)
+theme_override_constants/outline_size = 7
+theme_override_fonts/font = ExtResource("3_ce3w2")
+theme_override_font_sizes/font_size = 44
+theme_override_styles/normal = SubResource("StyleBoxFlat_opfnp")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_yhxw7")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cp0ys")
+text = "X"
+
+[node name="CreditsPanel" type="PanelContainer" parent="UI/HBoxContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_nggjd")
+
+[node name="Content" type="VBoxContainer" parent="UI/HBoxContainer/CreditsPanel"]
+layout_mode = 2
+theme_override_constants/separation = 32
+alignment = 1
+
+[node name="Title" type="RichTextLabel" parent="UI/HBoxContainer/CreditsPanel/Content"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0.21942383, 0.106685735, 0, 1)
+theme_override_constants/outline_size = 18
+theme_override_fonts/normal_font = ExtResource("2_48xlc")
+theme_override_font_sizes/normal_font_size = 40
+bbcode_enabled = true
+text = "[color=#4caf50]Credits[/color]"
+fit_content = true
+horizontal_alignment = 1
+
+[node name="Body" type="Label" parent="UI/HBoxContainer/CreditsPanel/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.94, 0.8, 1)
+theme_override_fonts/font = ExtResource("3_ce3w2")
+theme_override_font_sizes/font_size = 22
+text = "Mushrooms Deserve to Die
+
+Motor: Godot Engine
+
+Fontes originais:
+GREEN NATURE — ZetDesign (2019)
+MedievalSharp — wmk69 (SIL OFL 1.1)
+
+Menu e imagem de fundo:
+recursos originais deste projeto.
+MainMenu_BG_Seamless.png"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="CloseCredits" type="Button" parent="UI/HBoxContainer/CreditsPanel"]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+theme_override_colors/font_color = Color(1, 0.47785366, 0.41005626, 1)
 theme_override_colors/font_outline_color = Color(0.011087578, 0.01108758, 0.011087572, 1)
 theme_override_constants/outline_size = 7
 theme_override_fonts/font = ExtResource("3_ce3w2")
