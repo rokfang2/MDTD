@@ -43,6 +43,8 @@ __pycache__/
 /assets/*
 !/assets/fonts/
 !/assets/textures/
+!/assets/icon.svg
+!/assets/icon.svg.import
 !/assets/actions_native_v3.png
 !/assets/actions_native_v3.png.import
 !/assets/actors_v2.png
