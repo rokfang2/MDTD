@@ -77,6 +77,8 @@ __pycache__/
 !/assets/style_a_terrain_candidate_v4.png.import
 !/assets/warning.wav
 !/assets/warning.wav.import
+# Áudio do jogo (ata 27/10): catálogo em scripts/audio_cues.gd, gerador em tools/audio_gen/.
+!/assets/audio/
 
 # Restored authored menu assets and canonical scene casing are versioned.
 # Large generated menu captures/logs remain local.
