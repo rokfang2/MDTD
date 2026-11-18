@@ -1,6 +1,8 @@
 extends Node2D
 
 const World = preload("res://scripts/world.gd")
+const AudioDirector = preload("res://scripts/audio_director.gd")
+const AudioCues = preload("res://scripts/audio_cues.gd")
 const OriginalMenu = preload("res://Scenes/main_menu.tscn")
 const SAVE_PATH = "user://progress.json"
 const CREAM = Color("f4e8ca")
@@ -25,6 +27,7 @@ var flower = false
 var title_font: SystemFont
 var sfx: AudioStreamPlayer
 var ambience: AudioStreamPlayer
+var audio
 var muted = false
 var captures: Array[String] = []
 var shutting_down = false
@@ -44,15 +47,12 @@ func _ready() -> void:
 	layer.add_child(hud)
 	ui = Control.new()
 	layer.add_child(ui)
-	sfx = AudioStreamPlayer.new()
-	sfx.volume_db = -15
-	add_child(sfx)
-	ambience = AudioStreamPlayer.new()
-	ambience.stream = preload("res://assets/ambience.wav")
-	ambience.volume_db = -24
-	add_child(ambience)
-	if DisplayServer.get_name() != "headless":
-		ambience.play()
+	# Áudio responsivo (ata 27/10): buses, trilhas por zona, avisos, lótus, memórias e falas.
+	audio = AudioDirector.new()
+	audio.name = "AudioDirector"
+	add_child(audio)
+	sfx = audio.sfx_player()
+	ambience = audio.ambience_player()
 	_read_save()
 	show_menu()
 	var args = OS.get_cmdline_user_args()
@@ -83,8 +83,6 @@ func _process(dt: float) -> void:
 	if shutting_down:
 		return
 	clock += dt
-	if DisplayServer.get_name() != "headless" and not ambience.playing:
-		ambience.play()
 	if Input.is_action_just_pressed("mute"):
 		muted = not muted
 		AudioServer.set_bus_mute(0, muted)
@@ -153,6 +151,7 @@ func _button(parent: Node, text: String, at: Vector2, callback: Callable, primar
 		button.add_theme_color_override(color_name, Color("172a28") if primary else CREAM)
 	button.pressed.connect(callback)
 	parent.add_child(button)
+	audio.bind_button(button)
 	return button
 
 func show_menu() -> void:
@@ -171,6 +170,8 @@ func show_menu() -> void:
 	menu_scene.exit_requested.connect(shutdown)
 	add_child(menu_scene)
 	menu_scene.configure_save(save_data.has("checkpoint"))
+	audio.enter_menu()
+	audio.connect_ui(menu_scene)
 
 func _remove_menu() -> void:
 	if is_instance_valid(menu_scene):
@@ -196,6 +197,7 @@ func new_game() -> void:
 	memories.clear()
 	flower = false
 	start_world("trail")
+	audio.play("lotus_renascimento")
 	show_notice("ENCONTRE O LÓTUS  ·  siga à direita e escute as memórias", 5)
 
 func continue_game() -> void:
@@ -204,6 +206,7 @@ func continue_game() -> void:
 	memories.assign(save_data.get("memories", []))
 	flower = bool(save_data.get("flower", false))
 	start_world("trail")
+	audio.play("lotus_renascimento")
 
 func start_world(mode: String) -> void:
 	_remove_menu()
@@ -212,6 +215,7 @@ func start_world(mode: String) -> void:
 		world.queue_free()
 	world = World.new()
 	world.mode = mode
+	world.audio = audio
 	world.checkpoint = checkpoint
 	world.checkpoint_lit = checkpoint.x > 1000
 	world.memories.assign(memories)
@@ -327,14 +331,21 @@ func _overlay(title: String, subtitle: String) -> void:
 func show_pause() -> void:
 	state = "paused"
 	world.process_mode = Node.PROCESS_MODE_DISABLED
+	audio.set_focus("pause")
+	audio.play("pausa_abrir")
 	_overlay("Entre uma respiração e outra", "O mundo espera. A luz permanece acesa.\n\nJ / clique: ataque · Shift: dash · E: interagir")
 	_button(ui, "Retomar", Vector2(347, 432), resume_game, true, 270).grab_focus()
 	_button(ui, "Menu", Vector2(637, 432), show_menu, false, 270)
 
 func resume_game() -> void:
+	var from_memory = state == "memory"
 	_clear(ui)
 	state = "playing"
 	world.process_mode = Node.PROCESS_MODE_INHERIT
+	audio.stop_speech()
+	audio.set_focus("")
+	if not from_memory:
+		audio.play("pausa_fechar")
 
 func _memory_found(id: String, text: String) -> void:
 	if id not in memories:
@@ -343,15 +354,23 @@ func _memory_found(id: String, text: String) -> void:
 	world.process_mode = Node.PROCESS_MODE_DISABLED
 	var parts = text.split("\n", true, 1)
 	_overlay(parts[0].capitalize(), parts[1])
+	# A memória fala com a voz da seiva enquanto a trilha recua (ata 4.1: sons de fala).
+	audio.set_focus("memory")
+	audio.speak("seiva", parts[1], id.hash())
 	_label(ui, "PERCEPÇÃO  ·  %d / %d memórias escutadas" % [memories.size(),world.Level.MEMORIES.size()], Vector2(347, 381), 14, MINT, 590)
 	_button(ui, "Guardar a memória", Vector2(347, 470), resume_game, true, 330).grab_focus()
 
 func _death() -> void:
 	state = "dead"
 	world.process_mode = Node.PROCESS_MODE_DISABLED
+	audio.on_player_death()
 	_overlay("A luz ainda se lembra", "O corpo se desfaz. O lótus acolhe o que resta.\n\nRenasça no último lótus ativado. As memórias permanecem.")
-	_button(ui, "Renascer no lótus", Vector2(347, 445), func(): start_world("trail"), true, 330).grab_focus()
+	_button(ui, "Renascer no lótus", Vector2(347, 445), _respawn, true, 330).grab_focus()
 	_button(ui, "Menu", Vector2(697, 445), show_menu, false, 205)
+
+func _respawn() -> void:
+	start_world("trail")
+	audio.play("lotus_renascimento")
 
 func _victory() -> void:
 	flower = true
@@ -359,7 +378,12 @@ func _victory() -> void:
 	_write_save()
 	state = "victory"
 	world.process_mode = Node.PROCESS_MODE_DISABLED
-	_overlay("O primeiro fragmento", "Calêndula adquirida. Use F para curar a dormência do dash.\n\nA gema laranja encontra seu lugar no amuleto. A luz dos olhos vacila. O que ele estava protegendo?")
+	var blessing = "Calêndula adquirida. Use F para curar a dormência do dash.\n\nA gema laranja encontra seu lugar no amuleto. A luz dos olhos vacila. O que ele estava protegendo?"
+	_overlay("O primeiro fragmento", blessing)
+	# Bênção da flor sagrada: a flor fala com voz própria sobre a trilha do encontro.
+	audio.set_focus("blessing")
+	audio.play("bencao_calendula")
+	audio.speak("flor", blessing, 7)
 	_label(ui, "FIM DA PRIMEIRA FATIA JOGÁVEL  ·  1 de 5 confrontos", Vector2(347, 398), 13, MINT, 590)
 	_button(ui, "Testar a Calêndula · repetir luta", Vector2(347, 460), func(): start_world("arena"), true, 390).grab_focus()
 	_button(ui, "Menu", Vector2(753, 460), show_menu, false, 150)
@@ -382,12 +406,8 @@ func _write_save() -> void:
 		file.store_string(JSON.stringify(save_data))
 
 func play_sound(name: String) -> void:
-	if DisplayServer.get_name() == "headless":
-		return
-	var path = "res://assets/" + name + ".wav"
-	if ResourceLoader.exists(path):
-		sfx.stream = load(path)
-		sfx.play()
+	# Contrato anterior de world.sound: nomes antigos continuam aceitos.
+	audio.play(AudioCues.LEGACY.get(name, name))
 
 func _draw() -> void:
 	if state == "controls":
@@ -414,6 +434,7 @@ func shutdown() -> void:
 	if shutting_down:
 		return
 	shutting_down = true
+	audio.stop_all()
 	sfx.stop()
 	ambience.stop()
 	sfx.stream = null

@@ -69,7 +69,7 @@ def main():
               'readability_review', 'art_presentation', 'motion_animation', 'motion_wood',
               'arm_swing', 'full_motion_cycle', 'run_cadence', 'sword_cut', 'resource_visibility',
               'stationary_prayer', 'new_map_routes', 'map_projection', 'qa_environment_cohesion',
-              'boss_encounter', 'qa_soil_geometry', 'qa_boss_counterplay', 'menu_original']
+              'boss_encounter', 'qa_soil_geometry', 'qa_boss_counterplay', 'menu_original', 'audio_director']
     current_namespace = None
     for suite in suites:
         required = 'MushroomsNewMapRoutesQA' if suite == 'new_map_routes' else 'MushroomsStationaryPrayerQA'

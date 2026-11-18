@@ -8,6 +8,8 @@ signal phase_changed
 signal collapse_step(frame: int)
 signal cue(text: String)
 signal attack(kind: String, target: Vector2, phase: int)
+# Início de cada aviso, com a duração real: o áudio alinha o clímax ao golpe.
+signal tell_started(pattern: int, duration: float)
 
 var hp = 180
 var max_hp = 180
@@ -80,6 +82,7 @@ func _physics_process(dt: float) -> void:
 				# enough warning to jump the sensory pulse or cross a charge.
 				tell_duration = ([1.05,0.95,1.2,0.9] if phase == 1 else [0.8,0.8,1.05,0.72])[pattern]
 				timer = tell_duration
+				tell_started.emit(pattern, tell_duration)
 				match pattern:
 					0: cue.emit("RAÍZES EMERGINDO  ·  pule sobre a marca laranja")
 					1: cue.emit("ESPOROS DORMENTES  ·  desvie das esferas azuis")

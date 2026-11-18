@@ -5,6 +5,7 @@ const Druid = preload("res://scripts/player.gd")
 const Guardian = preload("res://scripts/boss.gd")
 const Art = preload("res://scripts/art.gd")
 const PixelArt = preload("res://scripts/pixel_art.gd")
+const AudioCues = preload("res://scripts/audio_cues.gd")
 signal entered_arena
 signal checkpoint_activated(at: Vector2)
 signal memory_found(id: String, text: String)
@@ -43,6 +44,11 @@ var praying = false
 var map_open = false
 var lotus_art = PixelArt.actor(7)
 var gem_art = preload("res://scripts/style_atlas.gd").texture(7)
+# Diretor de áudio de Main; nulo em testes que criam o mundo sozinho (tudo abaixo tolera isso).
+var audio = null
+var memory_emitters: Dictionary = {}
+var lotus_emitters: Array = []
+var fly_emitters: Dictionary = {}
 
 func _ready() -> void:
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
@@ -79,8 +85,13 @@ func _ready() -> void:
 	player.has_fragment = flower
 	player.position = checkpoint if mode == "trail" else Vector2(220, 590)
 	player.slash.connect(_on_slash)
-	player.hurt.connect(func(): shake = 9; sound.emit("hurt"))
+	player.hurt.connect(func(): shake = 9; sound.emit("druida_dano"))
 	player.dashed.connect(func(): sound.emit("dash"))
+	player.jumped.connect(func(): sound.emit("pulo"))
+	player.attack_started.connect(func(): sound.emit("espinho_brota"))
+	player.dash_refused.connect(func(): sound.emit("dash_bloqueado"))
+	player.stepped.connect(_on_step)
+	player.landed.connect(_on_land)
 	add_child(player)
 	camera = Camera2D.new()
 	camera.position = Vector2(640, 360)
@@ -99,13 +110,77 @@ func _ready() -> void:
 		boss.death_started.connect(_boss_death_started)
 		boss.phase_changed.connect(_boss_phase_changed)
 		boss.collapse_step.connect(_boss_collapse_step)
+		boss.tell_started.connect(_boss_tell)
 		add_child(boss)
 		toast.emit("CORDYCEPS  ·  o hospedeiro da Rede")
+	_setup_audio()
+
+func _setup_audio() -> void:
+	if audio == null:
+		return
+	if mode == "trail":
+		# Memórias são pistas sonoras: um sinal posicional por memória ainda não ouvida (ata 2.3).
+		for item in Level.MEMORIES:
+			if item.id not in memories:
+				memory_emitters[item.id] = audio.make_emitter(self, AudioCues.MEMORY_LOOP.get(item.id, "memoria_seiva"), item.pos + Vector2(0, -30))
+		for at in Level.LOTUSES:
+			lotus_emitters.append(audio.make_emitter(self, "lotus_foco", at + Vector2(0, -30)))
+		_refresh_lotus_audio()
+		for i in range(enemies.size()):
+			if enemies[i].kind == "fly":
+				fly_emitters[i] = audio.make_emitter(self, "mosca_zumbido", Vector2(enemies[i].x, enemies[i].y - 30))
+		audio.enter_trail()
+	else:
+		audio.enter_arena()
+
+func _refresh_lotus_audio() -> void:
+	# O foco de luz ativo soa mais presente que os demais.
+	for i in range(lotus_emitters.size()):
+		if is_instance_valid(lotus_emitters[i]):
+			var lit = checkpoint_lit and checkpoint == Level.LOTUSES[i]
+			lotus_emitters[i].volume_db = float(AudioCues.LOOPS["lotus_foco"]["db"]) + (5.0 if lit else 0.0)
+
+func _on_step() -> void:
+	if audio != null:
+		audio.footstep()
+
+func _on_land(impact: float) -> void:
+	if audio != null:
+		audio.land(impact)
+
+func _on_branch() -> bool:
+	if not player.is_on_floor():
+		return false
+	for rect in branches:
+		if player.position.x >= rect.position.x and player.position.x <= rect.end.x and absf(player.position.y - rect.position.y) < 6.0:
+			return true
+	return false
+
+func _danger_level() -> float:
+	if not player.enabled:
+		return 0.0
+	for enemy in enemies:
+		if enemy.hp > 0 and enemy.state in ["chase", "tell", "strike"] and absf(enemy.x - player.position.x) < 760 and absf(enemy.y - player.position.y) < 260:
+			return 1.0
+	return 0.0
+
+func _enemy_audio(enemy: Dictionary, what: String) -> void:
+	if audio == null:
+		return
+	var cue = AudioCues.ENEMY_SOUNDS[enemy.kind][what]
+	var at = Vector2(enemy.x, enemy.y - 40)
+	if what == "tell":
+		audio.telegraph(cue, 0.65, at, -3.0)
+	else:
+		audio.play(cue, at)
 
 func _physics_process(dt: float) -> void:
 	clock += dt
 	if Input.is_action_just_pressed("map"):
 		map_open = not map_open
+		sound.emit("mapa_abrir" if map_open else "mapa_fechar")
+	if audio != null:
+		audio.set_sensory(player.inverted > 0, player.numb > 0)
 	player.visible = not map_open
 	player.set_physics_process(not map_open)
 	if map_open:
@@ -146,6 +221,9 @@ func _physics_process(dt: float) -> void:
 func _tick_trail(dt: float) -> void:
 	player.position.x = clampf(player.position.x, 25, Level.WIDTH - 25)
 	_tick_enemies(dt)
+	if audio != null:
+		audio.update_position(player.position, _on_branch())
+		audio.set_danger(_danger_level())
 	if _tick_prayer(dt):
 		return
 	for at in Level.LOTUSES:
@@ -158,8 +236,11 @@ func _tick_trail(dt: float) -> void:
 			prompt = "E  ·  escutar a memória na seiva"
 			if Input.is_action_just_pressed("interact") and player.enabled:
 				memories.append(item.id)
+				if memory_emitters.has(item.id):
+					audio.remove_emitter(memory_emitters[item.id])
+					memory_emitters.erase(item.id)
 				memory_found.emit(item.id, item.text)
-				sound.emit("lotus")
+				sound.emit("memoria_revelada")
 	if absf(player.position.x - Level.PORTAL_X) < 90:
 		prompt = "E  ·  entrar no ninho do Cordyceps"
 		if Input.is_action_just_pressed("interact") and player.enabled:
@@ -170,11 +251,17 @@ func _tick_prayer(dt: float) -> bool:
 		return false
 	if player.hurt_lock > 0 or not player.enabled or player.position.distance_to(prayer_at) > 105:
 		_cancel_prayer()
+		if audio != null:
+			audio.prayer_end(false)
 	else:
 		prayer_elapsed += dt
+		if audio != null:
+			audio.prayer_progress(prayer_elapsed / 1.4)
 		prompt = "ORANDO  ·  %d%%" % mini(100,int(prayer_elapsed/1.4*100))
 		if prayer_elapsed >= 1.4:
 			_cancel_prayer()
+			if audio != null:
+				audio.prayer_end(true)
 			if mode == "arena":
 				reward_ready = false
 				reward_claimed.emit()
@@ -197,6 +284,8 @@ func activate_lotus(at: Vector2 = Vector2(1490,506)) -> void:
 	player.attack_pending = false
 	player.attack_time = 0
 	player.dash_time = 0
+	if audio != null:
+		audio.prayer_start()
 
 func _cancel_prayer() -> void:
 	praying = false
@@ -206,12 +295,14 @@ func _cancel_prayer() -> void:
 	player.dash_buffer = 0
 
 func _complete_lotus(at: Vector2) -> void:
+	var revisit = checkpoint_lit and checkpoint == at
 	checkpoint_lit = true
 	checkpoint = at
 	player.hp = 5
 	checkpoint_activated.emit(checkpoint)
 	toast.emit("ORAÇÃO CONCLUÍDA  ·  progresso salvo")
-	sound.emit("lotus")
+	sound.emit("lotus_reafirmado" if revisit else "lotus_salvo")
+	_refresh_lotus_audio()
 	burst(at + Vector2(0,-31), Color("ffdfa0"), 30)
 
 func _enemy_floor(enemy: Dictionary) -> Rect2:
@@ -242,6 +333,7 @@ func _tick_enemies(dt: float) -> void:
 						enemy.state = "tell"
 						enemy.timer = 0.65
 						enemy.aim = player.position+Vector2(0,-10 if flying else 0)
+						_enemy_audio(enemy, "tell")
 				else:
 					enemy.state = "chase"
 					if flying:
@@ -260,6 +352,7 @@ func _tick_enemies(dt: float) -> void:
 		elif enemy.state == "tell" and enemy.timer <= 0:
 			enemy.state = "strike"
 			enemy.timer = 0.3
+			_enemy_audio(enemy, "strike")
 			if enemy.kind == "spitter":
 				shots.append({"pos":Vector2(enemy.x+enemy.direction*50,enemy.y-40),"vel":Vector2(enemy.direction*240,0),"life":2.4,"radius":10.0})
 		elif enemy.state == "strike":
@@ -286,8 +379,18 @@ func _tick_enemies(dt: float) -> void:
 		var player_body = player.position+Vector2(0,-38)
 		if absf(player_body.x-body.x)<64 and absf(player_body.y-body.y)<46:
 			player.take_damage(1,body)
+	for i in fly_emitters.keys():
+		# Testes podem esvaziar a lista de inimigos: o zumbido sem dono é descartado.
+		if i >= enemies.size() or enemies[i].hp <= 0:
+			if audio != null:
+				audio.remove_emitter(fly_emitters[i])
+			fly_emitters.erase(i)
+		elif is_instance_valid(fly_emitters[i]):
+			fly_emitters[i].position = Vector2(enemies[i].x, enemies[i].y - 30)
 
 func _tick_arena(dt: float) -> void:
+	if audio != null:
+		audio.set_danger(1.0 if boss.phase == 2 and boss.state not in ["dying", "defeated"] else 0.0)
 	if _tick_prayer(dt):
 		return
 	if boss.active and boss.state != "phase_shift" and player.position.distance_to(boss.position + Vector2(0, -50)) < 80:
@@ -300,8 +403,9 @@ func _tick_arena(dt: float) -> void:
 			activate_lotus(reward_position)
 
 func _on_slash(origin: Vector2, direction: float) -> void:
-	sound.emit("slash")
-	for enemy in enemies:
+	sound.emit("ataque_espinho")
+	for i in range(enemies.size()):
+		var enemy = enemies[i]
 		var diff = Vector2(enemy.x, enemy.y - 28) - origin
 		# Ponta160px mais6px de tolerância ao centro dos inimigos pequenos.
 		if enemy.hp > 0 and absf(diff.y) < 65 and diff.x * direction > 0 and diff.x * direction < Druid.SLASH_REACH + 6:
@@ -310,14 +414,21 @@ func _on_slash(origin: Vector2, direction: float) -> void:
 			enemy.state = "recover"
 			enemy.timer = 0.65
 			burst(Vector2(enemy.x, enemy.y - 30), Color("b6c4f9"), 10)
-			sound.emit("hit")
+			sound.emit("golpe_acerta")
+			if audio != null:
+				audio.play("formiga_morte" if enemy.hp <= 0 else "formiga_dano", Vector2(enemy.x, enemy.y - 40))
+				if enemy.hp <= 0 and fly_emitters.has(i):
+					audio.remove_emitter(fly_emitters[i])
+					fly_emitters.erase(i)
 	if boss != null and boss.active:
 		var diff = boss.position + Vector2(0, -70) - origin
 		# A silhueta larga do guardião projeta76px além do centro do alvo.
 		if absf(diff.y) < 110 and diff.x * direction > 0 and diff.x * direction < Druid.SLASH_REACH + 76:
 			boss.receive_hit(12)
 			burst(origin + Vector2(direction * 70, 0), Color("e0ffc0"), 12)
-			sound.emit("hit")
+			sound.emit("golpe_pesado")
+			if boss.hp > 0 and int(boss.hp / 12.0) % 3 == 0:
+				sound.emit("cordyceps_dor")
 			shake = 3
 
 func _boss_attack(kind: String, target: Vector2, phase: int) -> void:
@@ -342,10 +453,16 @@ func _boss_attack(kind: String, target: Vector2, phase: int) -> void:
 			if player.is_on_floor() and player.invulnerable <= 0:
 				player.inverted = 1.2 if phase == 1 else 1.6
 				toast.emit("CONTROLES INVERTIDOS  ·  esquerda ↔ direita")
+				sound.emit("controles_invertidos")
 			else:
 				toast.emit("PULSO EVITADO  ·  aproxime-se durante a recuperação")
+				sound.emit("pulso_evitado")
 			hazards.append({"x": clampf(target.x, 80, 1170), "delay": 0.7, "life": 0.38, "width": 100.0, "hit": false})
-	sound.emit("warning")
+	sound.emit(AudioCues.BOSS_STRIKES.get(kind, "fase_dois"))
+
+func _boss_tell(pattern: int, duration: float) -> void:
+	if audio != null:
+		audio.telegraph(AudioCues.BOSS_TELLS[pattern], duration)
 
 func _tick_shots(dt: float) -> void:
 	for shot in shots:
@@ -355,6 +472,8 @@ func _tick_shots(dt: float) -> void:
 			player.take_damage(1, shot.pos)
 			player.numb = 1.7
 			shot.life = 0
+			sound.emit("esporo_impacto")
+			sound.emit("dormencia_inicio")
 			toast.emit("DORMÊNCIA  ·  dash bloqueado por 1,7 s" + ("  ·  F para usar Calêndula" if flower else ""))
 	shots = shots.filter(func(s): return s.life > 0 and s.pos.x > -60 and s.pos.x < (Level.WIDTH + 60 if mode == "trail" else 1340))
 
@@ -375,7 +494,7 @@ func use_flower() -> bool:
 	player.numb = 0
 	flower_cooldown = 6.0
 	burst(player.position + Vector2(0, -40), Color("ffc875"), 24)
-	sound.emit("lotus")
+	sound.emit("calendula_cura")
 	toast.emit("CALÊNDULA  ·  o tato desperta")
 	return true
 
@@ -396,7 +515,8 @@ func _boss_death_started() -> void:
 	reward_position = Vector2(reward_x,590)
 	shake = 5
 	toast.emit("O HOSPEDEIRO CEDE  ·  a Rede perde sua voz")
-	sound.emit("hit")
+	if audio != null:
+		audio.boss_dying()
 
 func _boss_phase_changed() -> void:
 	shots.clear()
@@ -404,10 +524,11 @@ func _boss_phase_changed() -> void:
 	pulse_time = 0
 	shake = 4
 	burst(boss.position+Vector2(0,-120),Color("ffb82b"),16)
-	sound.emit("warning")
+	sound.emit("fase_dois")
 
 func _boss_collapse_step(frame: int) -> void:
 	if frame in [2,3,4]:
+		sound.emit("colapso_estalo")
 		burst(boss.position+Vector2(0,-12),Color("996044"),12 if frame == 3 else 6)
 		shake = 4 if frame == 3 else 2
 	if frame == 5:
@@ -418,7 +539,8 @@ func _boss_defeated() -> void:
 	reward_ready = true
 	burst(reward_position+Vector2(0,-65),Color("ffc677"),24)
 	toast.emit("O GUARDIÃO SILENCIA  ·  aproxime-se da luz")
-	sound.emit("lotus")
+	if audio != null:
+		audio.boss_defeated()
 
 func burst(at: Vector2, color: Color, amount: int) -> void:
 	for i in range(amount):
