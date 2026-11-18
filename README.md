@@ -2,7 +2,7 @@
 
 Projeto editável de um jogo de ação e exploração 2D, desenvolvido em **Godot 4.7.2**, com GDScript e renderização Compatibility.
 
-A versão atual contém uma fase de 13.032 pixels com seis setores, rotas altas/baixas, quatro lótus de checkpoint, oito memórias e o primeiro chefe, Cordyceps. A derrota do chefe tem seis poses de colapso e restos persistentes. O estilo visual escolhido é A — Pixel Simples.
+A versão atual contém uma fase com rotas altas/baixas, quatro lótus de checkpoint, oito memórias e o primeiro chefe, Cordyceps. A derrota do chefe tem seis poses de colapso e restos persistentes. O estilo visual escolhido é Pixel Simples. Há um dos cinco confrontos previstos no GDD; os demais chefes e finais ainda não estão implementados.
 
 O áudio é responsivo ao jogo (ata de 27/10/2026), com estes elementos:
 - trilha e ambiente por região, com crossfade e eco de caverna nas galerias (goteiras e passos úmidos);
@@ -21,7 +21,7 @@ Lista por cenário e função: `docs/AUDIO_MAP.md`.
 2. Aguarde a importação automática dos recursos e pressione **F5**.
 3. No menu original animado, escolha **Start Game** para uma nova jornada ou **Continue**, se houver progresso local.
 
-No Windows, também é possível usar `Jogar.cmd`. O launcher procura Godot.exe na pasta do projeto ou a instalação 4.7.2 em Downloads. Para outra instalação, use `powershell -File .\Launch_Game.ps1 -GodotPath "C:\caminho\Godot.exe"`.
+No Windows, também é possível dar dois cliques em `jogar.cmd`. Na primeira vez, o atalho procura o Godot 4.7 na Área de Trabalho, em Documentos, Downloads, OneDrive e Arquivos de Programas, e memoriza o caminho para as próximas. Se o Godot estiver em outro lugar, defina uma vez a variável de ambiente `GODOT_BIN` num terminal: `setx GODOT_BIN "C:\caminho\Godot.exe"`.
 
 O repositório contém os recursos usados pelo projeto; a pasta `.godot/` é recriada pela engine. Não inclui executável exportado, saves pessoais, backups nem capturas/logs de desenvolvimento.
 
@@ -45,31 +45,67 @@ A oração acontece na posição do personagem; dano a interrompe. Memórias ent
 
 ## Organização
 
-- `scripts/`: lógica do jogo, combate, terreno e preparação dos sprites.
-- `Scenes/main_menu.tscn`: menu original com Parallax2D, fontes e imagem preservados.
-- `Scenes/main.tscn`: controlador do jogo; integra o menu original com mundo, interface e saves.
-- `Fonts/` e `Textures/`: recursos originais do menu, preservados do repositório.
-- `assets/`: imagens/áudios atualmente necessários e suas configurações de importação.
-- `assets/audio/`: música, ambientes, loops posicionais, efeitos e falas. Catálogo em `scripts/audio_cues.gd`, comportamento em `scripts/audio_director.gd`.
-- `tools/audio_gen/`: gerador determinístico de todo o áudio (`python tools/audio_gen/build.py`; requer numpy, scipy e ffmpeg).
-- `docs/AUDIO_MAP.md`: sons por cenário e função, regras de mixagem e diretrizes para os próximos chefes.
-- `tests/`: testes de comportamento na engine.
-- `tools/check_project.py`: revisão automatizada em cópia isolada.
-- `art/`: referência A, especificações e prompts de arte; tentativas brutas ficam fora deste repositório.
-- `review/`: critérios e resumos de revisão. Evidências pesadas permanecem no ambiente de desenvolvimento.
+| Pasta / arquivo | O que tem |
+|---|---|
+| `scenes/` | Cenas do Godot: `main.tscn` (cena principal do jogo) e `main_menu.tscn` (menu original) |
+| `scripts/` | Código do jogo: jogador, mundo, chefe, mapa, terreno, HUD, save e áudio (`audio_director.gd` e o catálogo `audio_cues.gd`) |
+| `assets/` | Tudo o que o jogo carrega: sprites, sons, fontes e texturas |
+| `assets/audio/` | Efeitos e falas (`sfx/`, `voice/`), músicas (`music/`), ambientes (`ambience/`) e loops (`loops/`) |
+| `assets/fonts/`, `assets/textures/` | Fontes e imagens de fundo do menu original |
+| `art/` | Arte de origem, que o jogo não carrega: referência do estilo, especificações de animação e prompts de geração |
+| `art/flowers/` | Arte conceitual e folha de sprites de cada flor sagrada (2048 px) |
+| `docs/gdd/` | Game Design Document v2 (narrativa, mundo, chefes, flores e finais) |
+| `docs/AUDIO_MAP.md` | Sons por cenário e função, regras de mixagem e diretrizes para os próximos chefes |
+| `docs/review/` | Guia e relatórios das revisões de qualidade |
+| `tests/` | Suítes de teste que rodam dentro do Godot |
+| `tools/` | Ferramentas do grupo, fora do jogo: `check_project.py` (roda os testes numa cópia isolada) e `audio_gen/` (gera o áudio) |
+| `docs/AGENTS.md` | Regras e decisões técnicas seguidas pelos agentes de IA (ver abaixo) |
+| `jogar.cmd` | Atalho para jogar no Windows (chama `tools/launch_game.ps1`) |
 
-## Testes
+Pastas e arquivos usam nomes em minúsculas, com `_` no lugar de espaços.
 
-Requer Python 3 e Godot 4.7.2, sem pacotes Python extras:
+## Como o projeto foi feito
 
-```powershell
-python tools/check_project.py --godot "C:\caminho\Godot_v4.7.2-stable_win64_console.exe"
-```
+Projeto do grupo **Mushrooms Deserve to Die**, para a disciplina de Desenvolvimento de Jogos (2º semestre, noturno).
 
-Ou defina `GODOT_BIN`/tenha `godot` no PATH. O runner copia o projeto para uma pasta QA temporária, confirma o namespace antes das suítes de save, importa os recursos e executa 22 suítes (incluindo `audio_director`). Ele não usa o save pessoal. Os logs e o resumo ficam na pasta QA impressa no terminal.
+**Feito pelo grupo:** GDD, narrativa, mundo e chefes; menu original; decisões de design e direção de arte; playtests.
 
-A integração do menu passou **518 verificações em 21 suítes**, incluindo as 476 da revisão16 e 42 do menu. Testes automatizados não substituem revisão visual nem playtest humano de conforto, equilíbrio e dificuldade. Há um dos cinco confrontos previstos no GDD; os demais chefes e finais ainda não estão implementados.
+### Ferramentas auxiliares
 
-## Histórico desta atualização
+- **Godot 4.7.2 e GDScript:** motor e linguagem do jogo.
+- **Python 3:** ferramentas em `tools/` (testes automatizados e geração de áudio, que usa numpy, scipy e ffmpeg).
+- **Git, GitHub e VS Code:** versionamento e trabalho em grupo.
+- **IA generativa, como apoio e não como base,** sempre sob direção e revisão do grupo:
+  - **Código e testes:** parte dos scripts em GDScript e dos testes foi escrita com agentes de programação (Codex e Claude Code). As regras que eles seguiam estão em `docs/AGENTS.md`.
+  - **Arte:** sprites e cenários foram gerados com ferramentas de imagem (ChatGPT e Gemini) a partir dos prompts em `art/`, e depois selecionados e ajustados pelo grupo.
+  - **Áudio:** os sons e as músicas são sintetizados por código, com os scripts em `tools/audio_gen/`.
 
-Esta atualização preserva o menu original do repositório e o integra à versão jogável atual. Fundo em movimento, imagem, fontes e composição continuam sendo os do menu original; Start Game/Continue iniciam a jornada atual. A pasta Scenes usa a mesma capitalização em todas as referências para funcionar em Windows e Linux. Os commits anteriores continuam no histórico Git. Caches, arte descartada, backups e ZIPs ficam fora da atualização.
+As decisões de jogo, a escolha do estilo e a aprovação final de cada mudança estão sob responsabilidade integral do grupo.
+
+## Observações
+
+### Reorganização do repositório (novembro de 2026)
+
+O jogo não mudou: a reorganização só alterou nomes e lugares de arquivos, e os 585 testes automatizados continuam passando. O que mudou para quem já tinha uma cópia:
+
+| Antes | Agora |
+|---|---|
+| `Scenes/` | `scenes/` |
+| `Fonts/`, `Textures/` | `assets/fonts/`, `assets/textures/` (arquivos renomeados sem espaços, ex.: `green_nature.ttf`) |
+| `icon.svg` | `assets/icon.svg` |
+| `pixel art/` | `art/flowers/` (arquivos sem espaços, ex.: `calendula_sprites.jfif`) |
+| `review/` | `docs/review/` |
+| `AGENTS.md` | `docs/AGENTS.md` |
+| `tests/generate_audio.py` | `tools/generate_audio.py` |
+| `Jogar.cmd`, `Launch_Game.ps1`, `Abrir_no_Godot.cmd` | Só `jogar.cmd` na raiz; o launcher foi para `tools/launch_game.ps1`. Para editar, importe o `project.godot` no Godot |
+
+Outras mudanças:
+- A folha de sprites da Coroa-de-Cristo, que estava quebrada (2 bytes), foi recuperada do histórico.
+- O GDD v2 foi adicionado em `docs/gdd/`.
+- Os `.import` do áudio passaram a ser versionados, e o `.gitignore` agora ignora executáveis (`.exe`, `.apk`) e `export_presets.cfg`.
+
+**Atenção:** trabalhos em andamento que usem os caminhos antigos (`res://Scenes/...`, `res://Fonts/...`, `res://Textures/...`) precisam ser atualizados antes de juntar com esta versão. Quem usa o Codex deve apontá-lo para `docs/AGENTS.md`, que não está mais na raiz.
+
+### Atualizações anteriores
+
+O menu original do repositório (fundo em movimento, fontes e composição) foi preservado e integrado à versão jogável; **Start Game** e **Continue** iniciam a jornada atual.
