@@ -6,6 +6,12 @@ signal hurt
 signal died
 signal slash(origin: Vector2, direction: float)
 signal dashed
+# Ganchos de áudio (ata 27/10): não alteram física nem a escolha de quadros.
+signal stepped
+signal jumped
+signal landed(impact: float)
+signal attack_started
+signal dash_refused
 
 const SPEED = 310.0
 const GRAVITY = 1800.0
@@ -144,6 +150,8 @@ func _physics_process(dt: float) -> void:
 	coyote = 0.0 if dropping > 0 else (0.12 if is_on_floor() else maxf(0, coyote - dt))
 	jump_buffer = 0.0 if dropping > 0 else (0.13 if Input.is_action_just_pressed("jump") else maxf(0, jump_buffer - dt))
 	dash_buffer = 0.12 if Input.is_action_just_pressed("dash") else maxf(0, dash_buffer - dt)
+	if Input.is_action_just_pressed("dash") and numb > 0:
+		dash_refused.emit()
 	if crouching:
 		dash_buffer = 0
 	attack_buffer = 0.12 if Input.is_action_just_pressed("attack") else maxf(0, attack_buffer - dt)
@@ -151,6 +159,7 @@ func _physics_process(dt: float) -> void:
 		velocity.y = JUMP
 		coyote = 0
 		jump_buffer = 0
+		jumped.emit()
 	if Input.is_action_just_released("jump") and velocity.y < -230:
 		velocity.y = -230
 	if dash_buffer > 0 and try_dash():
@@ -177,12 +186,14 @@ func _physics_process(dt: float) -> void:
 			gravity_scale = 0.62
 		velocity.y = minf(velocity.y + GRAVITY * gravity_scale * dt, 1000)
 	var before_move = position
+	var fall_speed = velocity.y
 	move_and_slide()
 	if was_dashing and (dash_time <= 0 or is_on_wall()):
 		dash_time = 0
 		velocity.x = dash_direction * SPEED if not is_on_wall() else 0.0
 	if not was_on_floor and is_on_floor():
 		land_pulse = 0.1
+		landed.emit(fall_speed)
 	sprite.flip_h = facing < 0
 	var previous_motion = motion_state
 	motion_state = "idle"
@@ -211,8 +222,13 @@ func _physics_process(dt: float) -> void:
 		sprite.texture = PixelArt.motion("crouch",timed_frame("crouch",motion_elapsed,0.1))
 	elif motion_state == "run":
 		# Deslocamento real não avança o ciclo ao pressionar contra uma parede.
+		var previous_frame = int(run_distance / RUN_CYCLE_DISTANCE * run_frames.size()) % run_frames.size()
 		run_distance += absf(position.x - before_move.x)
-		sprite.texture = run_frames[int(run_distance / RUN_CYCLE_DISTANCE * run_frames.size()) % run_frames.size()]
+		var run_frame = int(run_distance / RUN_CYCLE_DISTANCE * run_frames.size()) % run_frames.size()
+		# Passo nos contatos0/6 (pé apoiado), seguindo o deslocamento real como a animação.
+		if previous_motion != "run" or (run_frame != previous_frame and run_frame in [0, int(run_frames.size() * 0.5)]):
+			stepped.emit()
+		sprite.texture = run_frames[run_frame]
 	elif motion_state == "rise":
 		sprite.texture = PixelArt.motion("rise",timed_frame("rise",motion_elapsed,0.15))
 	elif motion_state == "dash":
@@ -257,6 +273,7 @@ func try_attack() -> bool:
 	attack_facing = facing
 	attack_pending = true
 	attack_windup = ATTACK_WINDUP_DURATION
+	attack_started.emit()
 	return true
 
 func take_damage(amount: int, source: Vector2) -> void:

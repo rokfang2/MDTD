@@ -4,6 +4,17 @@ Projeto editável de um jogo de ação e exploração 2D, desenvolvido em **Godo
 
 A versão atual contém uma fase de 13.032 pixels com seis setores, rotas altas/baixas, quatro lótus de checkpoint, oito memórias e o primeiro chefe, Cordyceps. A derrota do chefe tem seis poses de colapso e restos persistentes. O estilo visual escolhido é A — Pixel Simples.
 
+O áudio é responsivo ao jogo (ata de 27/10/2026), com estes elementos:
+- trilha e ambiente por região, com crossfade e eco de caverna nas galerias (goteiras e passos úmidos);
+- camada de perigo sincronizada quando inimigos perseguem;
+- trilha de combate do Cordyceps com camada de fase II;
+- avisos de ataque com som próprio, alinhados ao golpe, que abaixam a trilha para preservar a leitura;
+- lótus que soa no mapa e canto de oração que acompanha o progresso;
+- memórias como pistas sonoras, faladas com a "voz da seiva";
+- música e fala da flor sagrada na bênção.
+
+Lista por cenário e função: `docs/AUDIO_MAP.md`.
+
 ## Abrir e jogar
 
 1. Instale o Godot 4.7.2 e importe o arquivo `project.godot` deste repositório.
@@ -39,6 +50,9 @@ A oração acontece na posição do personagem; dano a interrompe. Memórias ent
 - `Scenes/main.tscn`: controlador do jogo; integra o menu original com mundo, interface e saves.
 - `Fonts/` e `Textures/`: recursos originais do menu, preservados do repositório.
 - `assets/`: imagens/áudios atualmente necessários e suas configurações de importação.
+- `assets/audio/`: música, ambientes, loops posicionais, efeitos e falas. Catálogo em `scripts/audio_cues.gd`, comportamento em `scripts/audio_director.gd`.
+- `tools/audio_gen/`: gerador determinístico de todo o áudio (`python tools/audio_gen/build.py`; requer numpy, scipy e ffmpeg).
+- `docs/AUDIO_MAP.md`: sons por cenário e função, regras de mixagem e diretrizes para os próximos chefes.
 - `tests/`: testes de comportamento na engine.
 - `tools/check_project.py`: revisão automatizada em cópia isolada.
 - `art/`: referência A, especificações e prompts de arte; tentativas brutas ficam fora deste repositório.
@@ -52,7 +66,7 @@ Requer Python 3 e Godot 4.7.2, sem pacotes Python extras:
 python tools/check_project.py --godot "C:\caminho\Godot_v4.7.2-stable_win64_console.exe"
 ```
 
-Ou defina `GODOT_BIN`/tenha `godot` no PATH. O runner copia o projeto para uma pasta QA temporária, confirma o namespace antes das suítes de save, importa os recursos e executa 21 suítes. Ele não usa o save pessoal. Os logs e o resumo ficam na pasta QA impressa no terminal.
+Ou defina `GODOT_BIN`/tenha `godot` no PATH. O runner copia o projeto para uma pasta QA temporária, confirma o namespace antes das suítes de save, importa os recursos e executa 22 suítes (incluindo `audio_director`). Ele não usa o save pessoal. Os logs e o resumo ficam na pasta QA impressa no terminal.
 
 A integração do menu passou **518 verificações em 21 suítes**, incluindo as 476 da revisão16 e 42 do menu. Testes automatizados não substituem revisão visual nem playtest humano de conforto, equilíbrio e dificuldade. Há um dos cinco confrontos previstos no GDD; os demais chefes e finais ainda não estão implementados.
 

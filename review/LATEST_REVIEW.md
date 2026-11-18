@@ -1,3 +1,44 @@
+# Áudio integrado — ata de 27/10 (2026-11-10)
+
+Pedido: fazer as tarefas de áudio da ata, integradas ao jogo e coerentes com as demais frentes (lótus/oração, memórias no cenário, regiões, chefes) e com o GDD v2.
+
+O que mudou:
+- **Catálogo e diretor:** scripts/audio_cues.gd e scripts/audio_director.gd.
+- **Integração:** main/world/player/boss, apenas com sinais aditivos. Física, quadros e saves continuam idênticos.
+- **Arquivos:** 109 em assets/audio, com gerador determinístico em tools/audio_gen.
+- **Documentação e teste:** docs/AUDIO_MAP.md, com a lista por cenário e função, e a suíte tests/audio_director.gd no runner.
+- **Contratos preservados:** Master no índice 0; Main.ambience, Main.sfx, play_sound e world.sound; World sem Main (áudio nulo).
+
+Evidência produzida neste ambiente, sem o motor:
+- **Sintaxe:** gdparse (gdtoolkit 4.3.3) em todos os .gd.
+- **Assets:**
+  - clímax dos 7 avisos medido em 1,36–1,37 s no chefe e 0,59–0,62 s nos inimigos, como previsto;
+  - camadas com o mesmo número de amostras da base (4/4);
+  - emendas dos loops sem salto anômalo (OGG decodificado, comparação com a vizinhança);
+  - loops curtos em WAV com chunk smpl, porque o Vorbis gerava erro de início de stream;
+  - loudness: menu −19, trilhas −21/−22, ambientes −27/−28 LUFS.
+- **Harmonia:** 72–99% da energia nas notas do acorde nas faixas de exploração e de flor.
+- **Trilha do chefe:** 3,3% de energia fora da escala na fase I. A caixa (antes Fá#/Mi) foi reafinada em Ré/Lá e os taikos passaram a seguir a fundamental do acorde. Os 9,8% fora da escala na camada da fase II vêm do glide de afinação dos taikos.
+
+Revisor separado (análise estática, sem motor) fez três constatações. Não encontrou erro de compilação GDScript, e as APIs e assinaturas do Godot 4.7 foram conferidas.
+
+Dois bugs confirmados e corrigidos:
+- **Catálogo dos loops:** apontava loops/*.ogg, mas os arquivos são .wav. As pistas de memória, lótus, oração e mosca ficariam mudas, e a suíte audio_director falharia.
+- **Zumbido das moscas:** era indexado por inimigo sem checar limites. O stationary_prayer esvazia `enemies`, o que gerava SCRIPT ERROR a cada quadro. Agora o zumbido sem dono é descartado.
+
+Ajustes menores:
+- o parâmetro `seed` foi renomeado;
+- o canto da oração pausa com o jogo;
+- o teste chama `zone_at` estaticamente.
+
+O revisor também percorreu cada passo do teste contra level_data e os tempos a 60 fps, sem achar fragilidade.
+
+Limites: o Godot 4.7.2 não pôde ser baixado nem executado neste ambiente. Por isso:
+- a importação, as 22 suítes do runner e o próprio audio_director não foram executados;
+- os .import dos novos áudios ainda não existem.
+
+Antes de mesclar na main é preciso executar `python tools/check_project.py --godot ...` e versionar os .import gerados. Não houve audição humana; os timbres de voz/coro são os mais artificiais. Launch_Game.ps1 -PrepareOnly e resource_visibility no checkout real ficam para a máquina do usuário.
+
 # Integração do menu original — 2026-10-27
 
 Pedido: conservar o menu já existente na main e conectá-lo ao jogo atual. Scenes/main_menu.tscn mantém a imagem, fontes e composição originais; Fonts/Textures/icon não têm diferenças em relação à main. O fundo rola à esquerda20px/s, usa escala uniforme e repetição pela largura renderizada, cobrindo toda a janela. Start/Continue iniciam a jornada, Settings controla volume/tela cheia, Credits/ajuda/saída funcionam. Main remove a cena e seu CanvasLayer antes do jogo ou da ajuda e a recria ao retornar. Configurações não gravam progresso. Scenes é a capitalização única.
