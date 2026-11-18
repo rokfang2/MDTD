@@ -3,7 +3,7 @@ extends SceneTree
 # Render-only staging in an isolated copy. Never write the player's progress.
 var game
 var world
-var directory = "res://review/art_cohesion/captures"
+var directory = "res://docs/review/art_cohesion/captures"
 var trace: FileAccess
 
 func _initialize() -> void:

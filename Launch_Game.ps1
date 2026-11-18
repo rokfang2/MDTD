@@ -13,7 +13,7 @@ try {
     if (-not (Test-Path -LiteralPath $GodotPath)) {
         throw 'Godot não encontrado. Importe project.godot no Godot 4 ou coloque Godot.exe nesta pasta.'
     }
-    $logDirectory = Join-Path $PSScriptRoot 'review\launch'
+    $logDirectory = Join-Path $PSScriptRoot 'docs\review\launch'
     New-Item -ItemType Directory -Force -Path $logDirectory | Out-Null
     $stamp = Get-Date -Format 'yyyyMMdd_HHmmss_fff'
     # Uma pasta .godot existente pode conter somente os sprites da versão antiga.

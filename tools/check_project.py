@@ -62,7 +62,7 @@ def main():
         entry, output = run('import_retry', ['--editor', '--import', '--quit'])
     if not entry['ok']:
         raise RuntimeError('Import failed. Logs: ' + str(logs))
-    helpers = source / 'review/borders_boss/tester'
+    helpers = source / 'docs/review/borders_boss/tester'
     for name in ('environment_cohesion', 'soil_geometry', 'boss_counterplay'):
         shutil.copy2(helpers / (name + '.gd'), sandbox / 'tests' / ('qa_' + name + '.gd'))
     suites = ['verify', 'movement_review', 'review_regressions', 'map_expansion',

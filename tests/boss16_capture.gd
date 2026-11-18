@@ -2,7 +2,7 @@ extends SceneTree
 
 var game
 var world
-var directory = "res://review/borders_boss/boss_captures"
+var directory = "res://docs/review/borders_boss/boss_captures"
 var trace: FileAccess
 
 func _initialize() -> void:

@@ -2,7 +2,7 @@ extends SceneTree
 
 # Quadros reais com input simulado e atores separados, para revisão visual.
 # Não escreve progresso nem representa teste humano de sensação de jogo.
-var directory = "res://review/style_a_fix/details"
+var directory = "res://docs/review/style_a_fix/details"
 
 func _initialize() -> void:
 	_run.call_deferred()

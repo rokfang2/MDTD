@@ -4,7 +4,7 @@ extends SceneTree
 var game
 var world
 var player
-var directory = "res://review/motion/sequence"
+var directory = "res://docs/review/motion/sequence"
 var frame_index = 0
 var saved_index = 0
 var long_run = false

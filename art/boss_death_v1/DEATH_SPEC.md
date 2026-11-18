@@ -1,6 +1,6 @@
 # Cordyceps — derrota visual V1
 
-Fonte: `assets/cordyceps_death_sheet_v1.png`, RGBA1536 ×1024. Gerada por `image_gen` integrado, sem edição raster por código ou Python. Prompts e bruto preservados nesta pasta. Referências examinadas: `style_a_atlas.png`, chefe inferior esquerdo; `review/art_cohesion/captures/21_arena.png`; coluna esquerda A de `art/style_a_reference.png` e contrato de `PixelArt.guardian`.
+Fonte: `assets/cordyceps_death_sheet_v1.png`, RGBA1536 ×1024. Gerada por `image_gen` integrado, sem edição raster por código ou Python. Prompts e bruto preservados nesta pasta. Referências examinadas: `style_a_atlas.png`, chefe inferior esquerdo; `docs/review/art_cohesion/captures/21_arena.png`; coluna esquerda A de `art/style_a_reference.png` e contrato de `PixelArt.guardian`.
 
 ## Seis poses
 

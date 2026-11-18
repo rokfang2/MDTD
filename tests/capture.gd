@@ -1,6 +1,6 @@
 extends SceneTree
 
-var directory = "res://review/captures"
+var directory = "res://docs/review/captures"
 
 func _initialize() -> void:
 	_run.call_deferred()

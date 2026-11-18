@@ -47,7 +47,7 @@ Testador separado executou as476 verificações anteriores e42 casos do menu em 
 
 Rodada final única:518/518 em21 suítes, importação e todas as suítes com exit0; código-fonte inalterado durante os testes. Revisor separado examinou as11 capturas e aprovou a integração sem bloqueantes (menu_original/VISUAL_REVIEW.md). Limites: dois instantes não certificam suavidade ou emenda após o ciclo completo; resize amostrado apenas16:9.
 
-No projeto pessoal: importação via Launch_Game.ps1 -PrepareOnly retornou IMPORT_READY; teste somente leitura resource_visibility passou56/56. Jogo iniciado via launcher e processo conferido. Nenhum save pessoal foi sobrescrito. Backup dos arquivos substituídos em review/github_publish/menu_original/before no ambiente de desenvolvimento.
+No projeto pessoal: importação via Launch_Game.ps1 -PrepareOnly retornou IMPORT_READY; teste somente leitura resource_visibility passou56/56. Jogo iniciado via launcher e processo conferido. Nenhum save pessoal foi sobrescrito. Backup dos arquivos substituídos em docs/review/github_publish/menu_original/before no ambiente de desenvolvimento.
 
 A revisão16 abaixo continua descrevendo o gameplay preservado. Somente scripts/main.gd mudou entre as duas publicações; scripts de atores, cenário, combate, mapa e assets ativos permaneceram idênticos. A main do GitHub permanece intacta até decisão de merge.
 

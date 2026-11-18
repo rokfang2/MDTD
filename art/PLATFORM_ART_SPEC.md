@@ -30,7 +30,7 @@ Inspeção da arte fonte: três silhuetas conectadas, raízes afuniladas, caps c
 
 ## Ciclo2: plataformas largas autorais V3
 
-`assets/style_a_platforms_wide_v3.png` é atlas RGBA2172 ×724 com duas silhuetas completas novas. Gerado com `image_gen` e uma edição dirigida após medir a primeira tentativa. Prompt e instrução de edição preservados em `art/style_a_platforms_wide_v3_prompt.txt`. Foram inspecionadas também as capturas corrigidas `review/style_a_fix/captures/02_trail.png` e `13_upper_route.png`, nas quais transformar a fonte longaV2 em210 ×16 alongava os motivos horizontalmente. V3 desenha MAIS raízes curtas para preencher a largura, sem reutilizar uma raiz horizontalmente esticada.
+`assets/style_a_platforms_wide_v3.png` é atlas RGBA2172 ×724 com duas silhuetas completas novas. Gerado com `image_gen` e uma edição dirigida após medir a primeira tentativa. Prompt e instrução de edição preservados em `art/style_a_platforms_wide_v3_prompt.txt`. Foram inspecionadas também as capturas corrigidas `docs/review/style_a_fix/captures/02_trail.png` e `13_upper_route.png`, nas quais transformar a fonte longaV2 em210 ×16 alongava os motivos horizontalmente. V3 desenha MAIS raízes curtas para preencher a largura, sem reutilizar uma raiz horizontalmente esticada.
 
 | Peça V3 | Recorte real alpha>=128 | Aspecto fonte | Nativo |
 |---|---|---|---|
