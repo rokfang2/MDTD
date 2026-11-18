@@ -4,7 +4,7 @@ const Art = preload("res://scripts/pixel_art.gd")
 var game
 var world
 var player
-var directory = "res://review/stationary_prayer/captures"
+var directory = "res://docs/review/stationary_prayer/captures"
 var trace: FileAccess
 var camera_at = Vector2(1490,420)
 
@@ -37,7 +37,7 @@ func _run() -> void:
 	DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_NO_FOCUS,true)
 	DisplayServer.window_set_position(Vector2i(-32000,-32000))
 	AudioServer.set_bus_mute(0,true)
-	game = load("res://Scenes/main.tscn").instantiate()
+	game = load("res://scenes/main.tscn").instantiate()
 	game.persist_progress = false
 	root.add_child(game)
 	await process_frame

@@ -19,19 +19,19 @@ __pycache__/
 *.pyc
 
 # Generated QA evidence stays local; retain reviewer guides and test helpers.
-/review/*
-!/review/REVIEW_GUIDE.md
-!/review/LATEST_REVIEW.md
-!/review/menu_original/
-/review/menu_original/*
-!/review/menu_original/VISUAL_REVIEW.md
-!/review/borders_boss/
-/review/borders_boss/*
-!/review/borders_boss/VISUAL_REVIEW.md
-!/review/borders_boss/EDGES.md
-!/review/borders_boss/tester/
-/review/borders_boss/tester/*
-!/review/borders_boss/tester/*.gd
+/docs/review/*
+!/docs/review/REVIEW_GUIDE.md
+!/docs/review/LATEST_REVIEW.md
+!/docs/review/menu_original/
+/docs/review/menu_original/*
+!/docs/review/menu_original/VISUAL_REVIEW.md
+!/docs/review/borders_boss/
+/docs/review/borders_boss/*
+!/docs/review/borders_boss/VISUAL_REVIEW.md
+!/docs/review/borders_boss/EDGES.md
+!/docs/review/borders_boss/tester/
+/docs/review/borders_boss/tester/*
+!/docs/review/borders_boss/tester/*.gd
 
 # Keep art specs/prompts and the approved style reference; exclude generated previews and raw attempts.
 /art/**/*.png
@@ -41,6 +41,10 @@ __pycache__/
 
 # Only resources consumed by this project. Historical variants stay outside the published tree.
 /assets/*
+!/assets/fonts/
+!/assets/textures/
+!/assets/icon.svg
+!/assets/icon.svg.import
 !/assets/actions_native_v3.png
 !/assets/actions_native_v3.png.import
 !/assets/actors_v2.png
@@ -82,3 +86,9 @@ __pycache__/
 
 # Restored authored menu assets and canonical scene casing are versioned.
 # Large generated menu captures/logs remain local.
+
+# Herdado do antigo .gitignore.txt
+.import/
+export_presets.cfg
+*.exe
+*.apk

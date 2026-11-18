@@ -14,7 +14,7 @@ Referência visual fornecida pelo usuário: **style_reference.png**, cópia de M
 
 As regiões do atlas são definidas em scripts/art.gd, world.gd e boss.gd. A imagem gerada tem 1254 × 1254 pixels; os recortes foram medidos na saída real, pois o layout solicitado no prompt não foi seguido exatamente. Os elementos são separados por alpha e não foram processados para remover fundo.
 
-As capturas para revisão ficam em ../review/captures/. Os acabamentos do chão são desenhados no mesmo lugar das colisões, para não depender de uma ilustração preservar coordenadas exatas.
+As capturas para revisão ficam em ../docs/review/captures/. Os acabamentos do chão são desenhados no mesmo lugar das colisões, para não depender de uma ilustração preservar coordenadas exatas.
 
 Na revisão 3, o atlas novo tem 1774 × 887 pixels, com oito células e separação real das linhas em y=465. scripts/pixel_art.gd prepara a apresentação nativa e a ancora pela base opaca de cada pose. O PNG original é preservado. Druida, inimigo, lótus e guardião são apresentados em pixels inteiros de 4 px com paleta de 19 cores; o cenário continua sendo a base. A faixa quadriculada desenhada no chão foi substituída por musgo do próprio cenário.
 
@@ -67,28 +67,28 @@ scripts/style_atlas.gd documenta recortes reais e a paleta de47cores do primeiro
 
 Artista separado criou assets/style_a_platforms_v2.png, com três silhuetas completas, e style_a_platforms_wide_v3.png, com duas variantes autorais largas. Prompts completos: style_a_platforms_v2_prompt.txt e style_a_platforms_wide_v3_prompt.txt (inclui edição dirigida). Referência exclusiva A; recortes alpha e medidas em PLATFORM_ART_SPEC.md.
 
-Corretor integrou em terrain.gd. Revisor devolveu a primeira montagem por alongamento das raízes; entrega final utiliza as variantes largasV3 sem sobreposição ou recorte inferior. Cada plataforma tem silhueta completa convertida uma vez à grade nativa, paleta47cores e ampliação4x, mantendo topo no collider. Capturas e aceite separado em review/style_a_fix/.
+Corretor integrou em terrain.gd. Revisor devolveu a primeira montagem por alongamento das raízes; entrega final utiliza as variantes largasV3 sem sobreposição ou recorte inferior. Cada plataforma tem silhueta completa convertida uma vez à grade nativa, paleta47cores e ampliação4x, mantendo topo no collider. Capturas e aceite separado em docs/review/style_a_fix/.
 
 
 ## Revisão8 — artista de movimento dedicado
 
 image_gen integrada gerou assets/motion_a_v1.png, referenciada no A aprovado e na identidade atual do druida. Prompt completo motion_a_v1_prompt.txt. Preparação por recortes reais e escala uniforme1/8 nearest em prepare_motion_a_v1.py produz assets/motion_a_native_v1.png:16células64x40, origem32,36. O renderer aplica a paleta compartilhada e escala4; não recorta cada pose por limites de alpha. Especificação e limites em MOTION_ART_SPEC.md.
 
-Oito poses de corrida alternam pernas, três de ataque, dash, subida, queda, pouso e idle. Animação integrada e revisada em sequência real da engine; ver review/motion/TEAM_REVIEW.md e LATEST_REVIEW.md. O GIF art/motion_a_run_preview.gif é só preview da prancha; review/motion/motion_preview.gif é o registro real integrado.
+Oito poses de corrida alternam pernas, três de ataque, dash, subida, queda, pouso e idle. Animação integrada e revisada em sequência real da engine; ver docs/review/motion/TEAM_REVIEW.md e LATEST_REVIEW.md. O GIF art/motion_a_run_preview.gif é só preview da prancha; docs/review/motion/motion_preview.gif é o registro real integrado.
 
 
 ## Revisão9 — madeira, membros verdes e ataque horizontal
 
 image_gen integrada EDIT preservando o moveset: assets/motion_wood_v1.png e prayer_wood_v1.png. Prompts completos motion_wood_v1_prompt.txt e prayer_wood_v1_prompt.txt. Preparação uniforme/isolamento/nearest em prepare_motion_wood_v1.py, sem recolorir/desenhar poses por código. Assets runtime motion_wood_native_v1.png e prayer_wood_native_v1.png; contrato64x40/origem32,36/escala4 em MOTION_WOOD_SPEC.md.
 
-O loader aplica paleta existente. Rastro horizontal por células em player.gd; madeira é parte do sprite da mão, não lâmina vetorial separada. Madeira recolhida fora do ataque e invocada durante a oração. Versão anterior preservada sem sobrescrever e no backup externo solicitado. Revisão real/aceite em review/wood/.
+O loader aplica paleta existente. Rastro horizontal por células em player.gd; madeira é parte do sprite da mão, não lâmina vetorial separada. Madeira recolhida fora do ataque e invocada durante a oração. Versão anterior preservada sem sobrescrever e no backup externo solicitado. Revisão real/aceite em docs/review/wood/.
 
 
 ## Revisão10 — balanço dos braços e madeira longa
 
 Arte nova via image_gen: motion_wood_run_v2.png e attack_wood_wide_v2c.png (tentativas anteriores preservadas), prompts completos motion_wood_run_v2_prompt.txt e attack_wood_wide_v2*_prompt.txt. Preparação reproduzível prepare_motion_wood_v2.py isola/composita desenhos gerados mantendo regiões aprovadas, sem desenhar braços/madeira por código. Runtime motion_wood_native_v2.png384x160/células96x40/pivô48,36; oração v1 apenas recebeu margem em prayer_wood_native_v2.png.
 
-Braços editados na banda18..28, cabeça e pernas inferiores preservadas; madeira separada ligada à mão aprovada sem escalar corpo. Medidas/ROIs/limites em MOTION_WOOD_V2_SPEC.md. Revisão de sequência real e testes separados em review/wood_v2/. Não reutilizar o preview da versão anterior como evidência desta versão.
+Braços editados na banda18..28, cabeça e pernas inferiores preservadas; madeira separada ligada à mão aprovada sem escalar corpo. Medidas/ROIs/limites em MOTION_WOOD_V2_SPEC.md. Revisão de sequência real e testes separados em docs/review/wood_v2/. Não reutilizar o preview da versão anterior como evidência desta versão.
 
 ## Revisão11
 Corrida/idle: MOTION_RUN_V3_SPEC.md, motion_run_v3*_prompt.txt, idle_v3_prompt.txt e prepare_motion_run_v3.py. Ataque/ações/oração: ACTIONS_V3_SPEC.md, *_v3_prompt.txt e prepare_actions_v3.py. Fontes raw preservadas nos assets; runtime usa somente folhas native_v3.

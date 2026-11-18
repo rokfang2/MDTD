@@ -32,7 +32,7 @@ func _run() -> void:
 	had_save = FileAccess.file_exists("user://progress.json")
 	if had_save:
 		original_save = FileAccess.get_file_as_string("user://progress.json")
-	game = load("res://Scenes/main.tscn").instantiate()
+	game = load("res://scenes/main.tscn").instantiate()
 	root.add_child(game)
 	await frames(2)
 	check(game.state == "menu", "menu inicial")

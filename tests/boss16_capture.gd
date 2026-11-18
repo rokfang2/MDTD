@@ -2,7 +2,7 @@ extends SceneTree
 
 var game
 var world
-var directory = "res://review/borders_boss/boss_captures"
+var directory = "res://docs/review/borders_boss/boss_captures"
 var trace: FileAccess
 
 func _initialize() -> void:
@@ -60,7 +60,7 @@ func _run() -> void:
 	DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_NO_FOCUS,true)
 	DisplayServer.window_set_position(Vector2i(-32000,-32000))
 	AudioServer.set_bus_mute(0,true)
-	game = load("res://Scenes/main.tscn").instantiate()
+	game = load("res://scenes/main.tscn").instantiate()
 	game.persist_progress = false
 	root.add_child(game)
 	await frames(2)

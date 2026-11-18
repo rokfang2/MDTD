@@ -3,7 +3,7 @@ extends SceneTree
 # Render-only staging in an isolated copy. Never write the player's progress.
 var game
 var world
-var directory = "res://review/art_cohesion/captures"
+var directory = "res://docs/review/art_cohesion/captures"
 var trace: FileAccess
 
 func _initialize() -> void:
@@ -51,7 +51,7 @@ func _run() -> void:
 	AudioServer.set_bus_mute(0,true)
 	trace = FileAccess.open(directory.path_join("action_positions.csv"),FileAccess.WRITE)
 	trace.store_csv_line(PackedStringArray(["capture","x","y"]))
-	game = load("res://Scenes/main.tscn").instantiate()
+	game = load("res://scenes/main.tscn").instantiate()
 	game.persist_progress = false
 	root.add_child(game)
 	await frames(2)

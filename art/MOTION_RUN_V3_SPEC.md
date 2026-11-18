@@ -8,4 +8,4 @@ O runtime avança pela distância realmente percorrida:112pixels por ciclo compl
 
 Repouso: assets/idle_native_v3.png,384×40,4células,220ms por quadro. Fonte idle_v3.png. Pivô e escala comuns aos demais movimentos; o repouso movimenta folhas/capa e postura.
 
-Verificar o resultado real em review/full_motion_v3/movement_60fps.mp4, contatos e fases em run_contacts_engine.png e coverage em pose_coverage.json. Hashes distintos não demonstram a anatomia: tests/arm_swing.gd mede também a inversão das pernas e punhos nos apoios0/6.
+Verificar o resultado real em docs/review/full_motion_v3/movement_60fps.mp4, contatos e fases em run_contacts_engine.png e coverage em pose_coverage.json. Hashes distintos não demonstram a anatomia: tests/arm_swing.gd mede também a inversão das pernas e punhos nos apoios0/6.

@@ -53,14 +53,14 @@ func _run() -> void:
 	had_save = FileAccess.file_exists("user://progress.json")
 	if had_save:
 		save_before = FileAccess.get_file_as_string("user://progress.json")
-	var configured = load("res://Scenes/main_menu.tscn").instantiate()
+	var configured = load("res://scenes/main_menu.tscn").instantiate()
 	configured.configure_save(true)
 	root.add_child(configured)
 	await frames(2)
 	check(configured.continue_button.visible,"configure_save before entering the tree preserves a usable Continue button")
 	configured.queue_free()
 	await frames(2)
-	game = load("res://Scenes/main.tscn").instantiate()
+	game = load("res://scenes/main.tscn").instantiate()
 	game.persist_progress = false
 	root.add_child(game)
 	await frames(3)
@@ -74,12 +74,12 @@ func _run() -> void:
 	var menu = game.menu_scene
 	var continue_button = button(menu,["Continue"])
 	check(continue_button != null and (continue_button.disabled or not continue_button.visible),"continue is unavailable without a checkpoint")
-	check(menu.scene_file_path == "res://Scenes/main_menu.tscn","actual original scene is instantiated instead of a second generated menu")
+	check(menu.scene_file_path == "res://scenes/main_menu.tscn","actual original scene is instantiated instead of a second generated menu")
 	var start = button(menu,["Start"])
-	check(start != null and start.get_theme_font("font").resource_path == "res://Fonts/MedievalSharp-Regular.ttf","original menu font is loaded through imported project resources")
+	check(start != null and start.get_theme_font("font").resource_path == "res://assets/fonts/medieval_sharp_regular.ttf","original menu font is loaded through imported project resources")
 	var parallax = menu.get_node_or_null("Parallax2D")
 	var sprite = menu.get_node_or_null("Parallax2D/Sprite2D")
-	check(parallax != null and sprite != null and sprite.texture.resource_path == "res://Textures/MainMenu_BG_Seamless.png","menu uses the original seamless artwork")
+	check(parallax != null and sprite != null and sprite.texture.resource_path == "res://assets/textures/main_menu_bg_seamless.png","menu uses the original seamless artwork")
 	if parallax != null and sprite != null:
 		var rect = sprite.get_rect()
 		var top = minf(sprite.position.y+rect.position.y*sprite.scale.y,sprite.position.y+rect.end.y*sprite.scale.y)

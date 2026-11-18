@@ -2,7 +2,7 @@
 
 ## Diagnóstico e direção
 
-Capturas examinadas antes da criação: `review/large_map/captures/01_old_new_connection.png`, `04_gallery_upper.png` e `08_canopy_lower.png`, comparadas à coluna esquerda A de `art/style_a_reference.png` e ao herói aprovado em `assets/idle_native_v3.png`. A árvore próxima verde/laranja do fundo antigo tinha células visuais grandes e alto contraste, competindo com o herói de contorno4px. As raízes do solo eram arcos muito grandes, enquanto as plataformas tinham outra densidade. A correção proposta é aproximar a gramática dos agrupamentos, sem ampliar o herói nem alterar poses/moveset.
+Capturas examinadas antes da criação: `docs/review/large_map/captures/01_old_new_connection.png`, `04_gallery_upper.png` e `08_canopy_lower.png`, comparadas à coluna esquerda A de `art/style_a_reference.png` e ao herói aprovado em `assets/idle_native_v3.png`. A árvore próxima verde/laranja do fundo antigo tinha células visuais grandes e alto contraste, competindo com o herói de contorno4px. As raízes do solo eram arcos muito grandes, enquanto as plataformas tinham outra densidade. A correção proposta é aproximar a gramática dos agrupamentos, sem ampliar o herói nem alterar poses/moveset.
 
 Novos rasters foram gerados/editados exclusivamente com `image_gen` integrado. Nenhum PNG foi desenhado/editado com Python ou por código. Os assets aprovados anteriores permanecem intactos. A preparação determinística NEAREST/paleta/alpha pertence ao integrador Godot. Prompts completos: `IMAGEGEN_PROMPTS.txt`. Imagens brutas, inclusive tentativas anteriores: `raw/`.
 
@@ -46,6 +46,6 @@ Esta entrega é inspeção de fontes raster e medição de regiões. Não é apr
 
 ## Correção de ruído do fundo V5
 
-Após integração, capturas `review/art_cohesion/captures/17_trail_idle.png` e `21_arena.png` mostraram manchas roxas pequenas que a paleta47expôs no fundoV4. O revisor confirmou o problema. Uma edição dirigida por `image_gen` preservou composição e dimensão1448 ×1086, eliminando os detalhes/manchas interiores e simplificando os fungos luminosos. Entrega separada: `assets/style_a_forest_candidate_v5.png`, mesmo destino320 ×240nativo. Prompt completo: `FOREST_V5_PROMPT.txt`. Bruto: `raw/forest_flat_v5.png`. V4 permanece intacto.
+Após integração, capturas `docs/review/art_cohesion/captures/17_trail_idle.png` e `21_arena.png` mostraram manchas roxas pequenas que a paleta47expôs no fundoV4. O revisor confirmou o problema. Uma edição dirigida por `image_gen` preservou composição e dimensão1448 ×1086, eliminando os detalhes/manchas interiores e simplificando os fungos luminosos. Entrega separada: `assets/style_a_forest_candidate_v5.png`, mesmo destino320 ×240nativo. Prompt completo: `FOREST_V5_PROMPT.txt`. Bruto: `raw/forest_flat_v5.png`. V4 permanece intacto.
 
 O prompt pediu quatro preenchimentos roxos hexuniformes. O gerador removeu a textura pontilhada visível, mas manteve alguma variação tonal ampla; portanto a fonte não deve ser descrita como literalmente4cores. Sua quantização47e nova captura devem confirmar a ausência de manchas isoladas. Bandas amplas contíguas e ruído de1texel são fenômenos diferentes; o revisor fará a distinção no resultado real. Solo e plataformas não foram editados neste cicloV5.

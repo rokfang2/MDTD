@@ -4,7 +4,7 @@ extends SceneTree
 var game
 var world
 var player
-var directory = "res://review/motion/sequence"
+var directory = "res://docs/review/motion/sequence"
 var frame_index = 0
 var saved_index = 0
 var long_run = false
@@ -58,7 +58,7 @@ func _run() -> void:
 	DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_NO_FOCUS,true)
 	DisplayServer.window_set_position(Vector2i(-32000,-32000))
 	AudioServer.set_bus_mute(0,true)
-	game = load("res://Scenes/main.tscn").instantiate()
+	game = load("res://scenes/main.tscn").instantiate()
 	game.persist_progress = false
 	root.add_child(game)
 	await process_frame

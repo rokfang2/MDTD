@@ -1,6 +1,6 @@
 extends SceneTree
 
-var directory = "res://review/captures"
+var directory = "res://docs/review/captures"
 
 func _initialize() -> void:
 	_run.call_deferred()
@@ -20,7 +20,7 @@ func _run() -> void:
 		if arg.begins_with("--capture-dir="):
 			directory = arg.trim_prefix("--capture-dir=")
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(directory))
-	var game = load("res://Scenes/main.tscn").instantiate()
+	var game = load("res://scenes/main.tscn").instantiate()
 	game.persist_progress = false
 	root.add_child(game)
 	await process_frame

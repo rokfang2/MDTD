@@ -2,7 +2,7 @@ extends SceneTree
 
 # Quadros reais com input simulado e atores separados, para revisão visual.
 # Não escreve progresso nem representa teste humano de sensação de jogo.
-var directory = "res://review/style_a_fix/details"
+var directory = "res://docs/review/style_a_fix/details"
 
 func _initialize() -> void:
 	_run.call_deferred()
@@ -22,7 +22,7 @@ func snap(name: String) -> void:
 
 func _run() -> void:
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(directory))
-	var game = load("res://Scenes/main.tscn").instantiate()
+	var game = load("res://scenes/main.tscn").instantiate()
 	game.persist_progress = false
 	root.add_child(game)
 	await process_frame

@@ -74,7 +74,7 @@ func _run() -> void:
 		check(false,"teste de save exige namespace exclusivo MushroomsStationaryPrayerQA")
 		quit(1)
 		return
-	game = load("res://Scenes/main.tscn").instantiate()
+	game = load("res://scenes/main.tscn").instantiate()
 	root.add_child(game)
 	game.start_world("trail")
 	world = game.world
