@@ -3,7 +3,7 @@ extends Node2D
 const World = preload("res://scripts/world.gd")
 const AudioDirector = preload("res://scripts/audio_director.gd")
 const AudioCues = preload("res://scripts/audio_cues.gd")
-const OriginalMenu = preload("res://Scenes/main_menu.tscn")
+const OriginalMenu = preload("res://scenes/main_menu.tscn")
 const SAVE_PATH = "user://progress.json"
 const CREAM = Color("f4e8ca")
 const MINT = Color("a5d9bc")

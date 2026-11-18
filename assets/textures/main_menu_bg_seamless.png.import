@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cq7m0pc6a1780"
-path="res://.godot/imported/MainMenu_BG_Seamless.png-1ac9cd793ba2a39d9061c88d49b4eae7.ctex"
+path="res://.godot/imported/main_menu_bg_seamless.png-a174f256632052516230e12d3d80fb5e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Textures/MainMenu_BG_Seamless.png"
-dest_files=["res://.godot/imported/MainMenu_BG_Seamless.png-1ac9cd793ba2a39d9061c88d49b4eae7.ctex"]
+source_file="res://assets/textures/main_menu_bg_seamless.png"
+dest_files=["res://.godot/imported/main_menu_bg_seamless.png-a174f256632052516230e12d3d80fb5e.ctex"]
 
 [params]
 

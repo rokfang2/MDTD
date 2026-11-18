@@ -28,7 +28,7 @@ Crouching on the floor is stationary, cancels controlled dash and does not queue
 
 ## Current implementation
 
-Main scene: Scenes/main.tscn. Scripts build gameplay and HUD at runtime. Tests: tests/verify.gd (progression), tests/movement_review.gd (movement) and tests/review_regressions.gd (review findings). Run portable isolated verification through tools/check_project.py.
+Main scene: scenes/main.tscn. Scripts build gameplay and HUD at runtime. Tests: tests/verify.gd (progression), tests/movement_review.gd (movement) and tests/review_regressions.gd (review findings). Run portable isolated verification through tools/check_project.py.
 
 Do not require user approval for routine local fixes or screenshots. Report provisional animation work and the need for human playtesting honestly.
 
@@ -50,9 +50,9 @@ Four existing patterns remain cyclic with distinct tell timings. Fan3/5 is symme
 
 ## Original authored menu — explicit user override
 
-The user explicitly requested retaining the original GitHub menu, including its scrolling image, fonts and layout, and connecting it to the playable game. Scenes/main_menu.tscn plus Fonts/Textures are the binding menu reference from original main; do not replace them with the runtime-generated menu or styleAforest. Gameplay art remains unchanged. Parallax scrolls left20px/s, covers the viewport with seamless repeat and uniform scaling. Start Game starts a new journey; Continue only appears for an existing save; Settings/Credits/help/exit are functional. Settings do not write gameplay progress. Only gameplay prayer saves progress.
+The user explicitly requested retaining the original GitHub menu, including its scrolling image, fonts and layout, and connecting it to the playable game. scenes/main_menu.tscn plus assets/fonts and assets/textures are the binding menu reference from original main; do not replace them with the runtime-generated menu or styleAforest. Gameplay art remains unchanged. Parallax scrolls left20px/s, covers the viewport with seamless repeat and uniform scaling. Start Game starts a new journey; Continue only appears for an existing save; Settings/Credits/help/exit are functional. Settings do not write gameplay progress. Only gameplay prayer saves progress.
 
-Use canonical Scenes/ casing everywhere: never introduce a separate scenes/ directory because Windows and Linux differ in path handling. Main owns menu lifecycle and must release it before starting gameplay or opening controls, then recreate it when returning. Preserve pause, saves, hero, boss and collision data. tools/check_project.py validates isolated copies including Fonts/Textures and tests/menu_original.gd. Review actual rendered menu at different times/resolutions and inspect Settings/Credits/Continue/help/game transitions separately from passing assertions.
+Folder and file names are lowercase snake_case (scenes/, assets/fonts/, assets/textures/): never reintroduce capitalized variants such as Scenes/, because Windows and Linux differ in path handling. Main owns menu lifecycle and must release it before starting gameplay or opening controls, then recreate it when returning. Preserve pause, saves, hero, boss and collision data. tools/check_project.py validates isolated copies including assets/fonts, assets/textures and tests/menu_original.gd. Review actual rendered menu at different times/resolutions and inspect Settings/Credits/Continue/help/game transitions separately from passing assertions.
 
 ## Audio (ata 27/10/2026)
 

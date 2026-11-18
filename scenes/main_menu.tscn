@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://2yvq6yiiep7y"]
 
-[ext_resource type="Script" uid="uid://lekjychlp37n" path="res://Scenes/main_menu.gd" id="1_ce3w2"]
-[ext_resource type="FontFile" uid="uid://spk7gp8eoi7u" path="res://Fonts/GREEN NATURE.ttf" id="2_48xlc"]
-[ext_resource type="Texture2D" uid="uid://cq7m0pc6a1780" path="res://Textures/MainMenu_BG_Seamless.png" id="2_ce3w2"]
-[ext_resource type="FontFile" uid="uid://caxnn2nrvambr" path="res://Fonts/MedievalSharp-Regular.ttf" id="3_ce3w2"]
+[ext_resource type="Script" uid="uid://lekjychlp37n" path="res://scenes/main_menu.gd" id="1_ce3w2"]
+[ext_resource type="FontFile" uid="uid://spk7gp8eoi7u" path="res://assets/fonts/green_nature.ttf" id="2_48xlc"]
+[ext_resource type="Texture2D" uid="uid://cq7m0pc6a1780" path="res://assets/textures/main_menu_bg_seamless.png" id="2_ce3w2"]
+[ext_resource type="FontFile" uid="uid://caxnn2nrvambr" path="res://assets/fonts/medieval_sharp_regular.ttf" id="3_ce3w2"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gn21i"]
 content_margin_top = 40.0
@@ -358,7 +358,7 @@ MedievalSharp — wmk69 (SIL OFL 1.1)
 
 Menu e imagem de fundo:
 recursos originais deste projeto.
-MainMenu_BG_Seamless.png"
+main_menu_bg_seamless.png"
 horizontal_alignment = 1
 autowrap_mode = 3
 

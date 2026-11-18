@@ -36,7 +36,7 @@ func heard_prefix(audio, prefix: String) -> bool:
 
 func _run() -> void:
 	var master_before = AudioServer.get_bus_volume_db(0)
-	game = load("res://Scenes/main.tscn").instantiate()
+	game = load("res://scenes/main.tscn").instantiate()
 	game.persist_progress = false
 	root.add_child(game)
 	await frames(3)

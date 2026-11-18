@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://caxnn2nrvambr"
-path="res://.godot/imported/MedievalSharp-Regular.ttf-3f3ba69593748a4bb852f7c7b992d2f7.fontdata"
+uid="uid://spk7gp8eoi7u"
+path="res://.godot/imported/green_nature.ttf-2a1dd8d911a9204c31718bbe8fed8f2c.fontdata"
 
 [deps]
 
-source_file="res://Fonts/MedievalSharp-Regular.ttf"
-dest_files=["res://.godot/imported/MedievalSharp-Regular.ttf-3f3ba69593748a4bb852f7c7b992d2f7.fontdata"]
+source_file="res://assets/fonts/green_nature.ttf"
+dest_files=["res://.godot/imported/green_nature.ttf-2a1dd8d911a9204c31718bbe8fed8f2c.fontdata"]
 
 [params]
 

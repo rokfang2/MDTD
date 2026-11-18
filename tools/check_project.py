@@ -23,7 +23,7 @@ def main():
     logs.mkdir()
     print('QA_COPY:', sandbox, flush=True)
     manifest = {}
-    for folder in ('scripts', 'Scenes', 'assets', 'tests', 'Fonts', 'Textures'):
+    for folder in ('scripts', 'scenes', 'assets', 'tests'):
         shutil.copytree(source / folder, sandbox / folder)
         for path in (source / folder).rglob('*'):
             if path.is_file():

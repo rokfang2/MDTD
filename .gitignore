@@ -41,6 +41,8 @@ __pycache__/
 
 # Only resources consumed by this project. Historical variants stay outside the published tree.
 /assets/*
+!/assets/fonts/
+!/assets/textures/
 !/assets/actions_native_v3.png
 !/assets/actions_native_v3.png.import
 !/assets/actors_v2.png
