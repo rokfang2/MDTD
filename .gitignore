@@ -82,3 +82,9 @@ __pycache__/
 
 # Restored authored menu assets and canonical scene casing are versioned.
 # Large generated menu captures/logs remain local.
+
+# Herdado do antigo .gitignore.txt
+.import/
+export_presets.cfg
+*.exe
+*.apk
