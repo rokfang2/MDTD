@@ -151,4 +151,4 @@ Os limites conhecidos desta entrega:
 - **Placeholders procedurais.** O áudio é sintetizado por código: serve para validar timing, legibilidade e transições. O coro, os sussurros e as falas são os timbres mais artificiais.
 - **Não verificado no motor.** A verificação foi por análise (afinação/acordes, clímax dos avisos, emendas dos loops, sincronia das camadas, loudness). Não houve audição humana nem execução no Godot neste ambiente.
 - **Arquivos `.import` pendentes.** Os `.import` dos novos áudios ainda não existem: o Godot os cria na primeira importação (`Launch_Game.ps1` / `check_project.py`), e eles devem ser versionados em seguida.
-- **WAVs legados.** `assets/ambience.wav`, `dash.wav`, `hit.wav`, `hurt.wav`, `lotus.wav`, `slash.wav` e `warning.wav` (gerados por `tests/generate_audio.py`) não são mais carregados, e podem ser removidos numa limpeza futura.
+- **WAVs legados.** `assets/ambience.wav`, `dash.wav`, `hit.wav`, `hurt.wav`, `lotus.wav`, `slash.wav` e `warning.wav` (gerados por `tools/generate_audio.py`) não são mais carregados, e podem ser removidos numa limpeza futura.
